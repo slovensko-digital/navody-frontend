@@ -8,19 +8,33 @@
   <!--<![endif]-->
   <!--[if IE 8]> <link rel="stylesheet" href="/public/app-ie8.css"> <![endif]-->
   <!--[if lt IE 9]> <script src="/vendor/html5-shiv/html5shiv.js"></script> <![endif]-->
+  <script src="https://www.google.com/recaptcha/api.js?render=6Len1KcUAAAAAMYeenXLlLflZFGlRxzDISyyeqX5"></script>
+  <script src="./confetti.js"></script>
+  <script>
+    let recatpcha_token = null;
+    grecaptcha.ready(function () {
+      grecaptcha
+        .execute('6Len1KcUAAAAAMYeenXLlLflZFGlRxzDISyyeqX5', {action: 'homepage'})
+        .then(function (token) {
+          recatpcha_token = token;
+          return token;
+        });
+    });
+  </script>
+
 {% endblock %}
 
 {% block main %}
 
-<div class="govuk-width-container">
-  <main class="govuk-main-wrapper">
-    <div class="govuk-grid-column-full">
-      <h2 class="govuk-heading-l">Máte nápad ako zlepšiť elektronické služby ?</h2>
-      <p>Poďme do toho spolu a ukážme, kde je priestor na zlepšenie.</p>
-    </div>
-    <div class="govuk-grid-column-two-thirds">
+  <div class="govuk-width-container">
+    <main class="govuk-main-wrapper">
+      <div class="govuk-grid-column-full">
+        <h2 class="govuk-heading-l">Máte nápad ako zlepšiť elektronické služby ?</h2>
+        <p>Poďme do toho spolu a ukážme, kde je priestor na zlepšenie.</p>
+      </div>
+      <div class="govuk-grid-column-two-thirds">
 
-        <form action="/" method="post">
+        <form action="/" method="post" id="submit-form">
           <fieldset class="govuk-fieldset">
             <div class="govuk-form-group">
               <label class="govuk-label" for="govuk-input-summary">
@@ -38,9 +52,10 @@
 
             <div class="govuk-form-group">
               <label class="govuk-label" for="select-category">
-                Kategória <em>(nepovinné)</em>
+                Kategória
+                <em>(nepovinné)</em>
               </label>
-              <select class="govuk-select govuk-!-width-one-third" id="select-category" name="select-category">
+              {# <select class="govuk-select govuk-!-width-one-third" id="select-category" name="select-category">
                 <option value="0">Žiadne</option>
                 <option value="1">Občan</option>
                 <option value="2" selected="">Podnikateľ</option>
@@ -52,12 +67,48 @@
                 <option value="1">Bývanie</option>
                 <option value="2" selected="">Financie</option>
                 <option value="3">Zamestnanie</option>
+              </select> #}
+
+              <select class="govuk-select govuk-!-width-one-third" name="customfield_10204" id="customfield_10204">
+                <option class="default-option" value="" selected="selected">Žiadne</option>
+                <option class="option-group-10203" value="10203">Občan</option>
+                <option class="option-group-10204" value="10204">Podnikateľ</option>
+                <option class="option-group-10205" value="10205">Úradník</option>
               </select>
+
+              <select class="govuk-select govuk-!-width-one-third" name="customfield_10204:1" id="customfield_10204:1" tabindex="-1" title="">
+                <option class="option-group-10203" value="">Žiadne</option>
+                <option class="option-group-10203" value="10206">Bývanie</option>
+                <option class="option-group-10203" value="10207">Financie</option>
+                <option class="option-group-10203" value="10208">Zamestnanie</option>
+                <option class="option-group-10203" value="10209">Obrana a Bezpečnosť</option>
+                <option class="option-group-10203" value="10210">Cestovanie</option>
+                <option class="option-group-10203" value="10211">Kultúra</option>
+                <option class="option-group-10203" value="10212">Rodina a Vzťahy</option>
+                <option class="option-group-10203" value="10213">Zdravie</option>
+                <option class="option-group-10203" value="10214">Doprava</option>
+                <option class="option-group-10203" value="10215">Občan a štát</option>
+                <option class="option-group-10203" value="10216">Vzdelanie a šport</option>
+                <option class="option-group-10203" value="10217">Životné prostredie</option>
+
+                <option class="option-group-10204" value="">Žiadne</option>
+                <option class="option-group-10204" value="10218">Administratívny a ekonomický chod</option>
+                <option class="option-group-10204" value="10220">Zodpovedné podnikanie</option>
+                <option class="option-group-10204" value="10221">Duševné vlastníctvo</option>
+                <option class="option-group-10204" value="10222">Ukončenie podnikania</option>
+                <option class="option-group-10204" value="10223">Podnikanie</option>
+                <option class="option-group-10204" value="10224">Začatie podnikania</option>
+
+                <option class="option-group-10205" value="">Žiadne</option>
+                <option class="option-group-" value="">Žiadne</option>
+              </select>
+
             </div>
 
             <div class="govuk-form-group">
               <label class="govuk-label" for="file-upload">
-                Príloha <em>(nepovinné)</em>
+                Príloha
+                <em>(nepovinné)</em>
               </label>
               <input class="govuk-file-upload" id="file-upload" name="file-upload" type="file">
             </div>
@@ -66,14 +117,14 @@
               <label class="govuk-label" for="govuk-input-name">
                 Meno
               </label>
-              <input class="govuk-input govuk-!-width-one-half" id="govuk-input-name" name="govuk-input-name" type="text">
+              <input class="govuk-input govuk-!-width-two-thirds" id="govuk-input-name" name="govuk-input-name" type="text">
             </div>
 
             <div class="govuk-form-group">
               <label class="govuk-label" for="govuk-input-email">
                 E-mail
               </label>
-              <input class="govuk-input govuk-!-width-one-half" id="govuk-input-email" name="govuk-input-email" type="text">
+              <input class="govuk-input govuk-!-width-two-thirds" id="govuk-input-email" name="govuk-input-email" type="text">
             </div>
 
             <button type="submit" class="govuk-button">
@@ -85,7 +136,125 @@
       </div>
     </div>
 
+    <script>
+
+      function celebrationComeOn() {
+        confetti.start()
+        setTimeout(() => {
+          confetti.stop()
+        }, 3000)
+      }
+
+      function postData(data) {
+        const postURL = "https://lepsiesluzby.sk/jira/rest/api/2/issue";
+        const body = JSON.stringify(data);
+        const headers = new Headers()
+        headers.set('Content-Type', 'application/json; charset=utf8')
+        headers.set('Accept', 'application/json')
+        headers.set('recaptcha-token', recatpcha_token)
+        headers.set('Origin', 'https://lepsiesluzby.sk')
+        headers.set('Content-Length', body.length.toString())
+
+        fetch(postURL, {
+          method: 'POST',
+          mode: 'cors',
+          headers,
+          body
+        })
+          .then(x => console.log(x))
+          .catch(x => console.error(x))
+        };
+
+      function onSubmit(e) {
+        e.preventDefault();
+
+        const form = e.srcElement;
+        const val = (el) => el.value
+
+        const output = {
+          "fields": {
+            "project": {
+              "key": "SDM"
+            },
+            "issuetype": {
+              "name": "Bug"
+            },
+            "summary": val(form['govuk-input-summary']),
+            "description": val(form['govuk-textarea-description']),
+            "components": [
+              {
+                "name": "e-services"
+              }
+            ],
+            "customfield_10200": val(form['govuk-input-email']),
+            "customfield_10116": val(form['govuk-input-name']),
+            "customfield_10204": {
+              'value': val(form['customfield_10204']),
+              'child': {
+                'value': val(form['customfield_10204:1'])
+              }
+            }
+          }
+        }
+
+        postData(output);
+
+        celebrationComeOn();
+
+        return false;
+      }
+
+      function cascadingSelect(customfield_10204) {
+
+        console.log(customfield_10204.value)
+        const secondarySelect = document.getElementById('customfield_10204:1')
+
+        secondarySelect
+          .querySelectorAll(`.option-group-${customfield_10204.value}`)
+          .forEach(function (el) {
+            el.style.display = '';
+            el.selected = false;
+          });
+        secondarySelect
+          .querySelectorAll(`:not(.option-group-${customfield_10204.value})`)
+          .forEach(function (el) {
+            el.style.display = 'none';
+            el.selected = false;
+          });;
+      }
+
+      function onChangeCascadingSelect(e) {
+        cascadingSelect(e.target);
+      }
+
+      document
+        .getElementById('submit-form')
+        .addEventListener('submit', onSubmit)
+
+      const customfield_10204 = document.getElementById('customfield_10204');
+
+      customfield_10204.addEventListener('change', onChangeCascadingSelect)
+      cascadingSelect(customfield_10204)
+    </script>
+
   </main>
 </div>
+
+{# <script>
+  fetch("https://lepsiesluzby.sk/jira/servicedesk/customer/portal/1/create/5", {
+    "credentials": "include",
+    "headers": {
+      "accept": "*/*",
+      "accept-language": "en-US,en;q=0.9,sk;q=0.8",
+      "content-type": "application/x-www-form-urlencoded",
+      "x-requested-with": "XMLHttpRequest"
+    },
+    "referrer": "https://lepsiesluzby.sk/jira/servicedesk/customer/portal/1/create/5",
+    "referrerPolicy": "no-referrer-when-downgrade",
+    "body": "atl_token=BVL3-BDNM-3XMM-C951_d616940c83ac3483a2dee733db64efaec2ba5380_lin&projectId=10000&summary=test&description=test&customfield_10204=10203&customfield_10204%3A1=10207&pid=10000&atl_token=BVL3-BDNM-3XMM-C951_d616940c83ac3483a2dee733db64efaec2ba5380_lin&customfield_10116=&customfield_10200=&sd-kb-article-viewed=false",
+    "method": "POST",
+    "mode": "cors"
+  });
+</script> #}
 
 {% endblock %}

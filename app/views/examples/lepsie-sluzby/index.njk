@@ -16,111 +16,82 @@
 
 {% block main %}
 
-{{ govukHero() }}
+  {{ govukHero() }}
 
-<div class="govuk-width-container">
-  <main class="govuk-main-wrapper">
+  <div class="govuk-width-container">
+    <main class="govuk-main-wrapper">
 
-    <div class="govuk-grid-row">
-      <div class="govuk-grid-column-three-quarters govuk-!-padding-bottom-6">
-        {{ govukThumbnail({
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters govuk-!-padding-bottom-6">
+          {{ govukThumbnail({
           button_url: '/examples/lepsie-sluzby/form'
         }) }}
+        </div>
       </div>
-    </div>
 
-    {{ govukTable({
-      "caption": "Čo aktuálne riešime",
-      "captionClasses": "govuk-heading-m",
-      "firstCellIsHeader": true,
-      "head": [
-        {
-          "text": "Podnet"
-        },
-        {
-          "text": "Kategória",
-          "format": "numeric"
-        },
-        {
-          "text": "Dátum",
-          "format": "numeric"
-        }
-      ],
-      "rows": [
-        [
-          {
-            "text": "Web slovensko.sk"
-          },
-          {
-            "text": "Občan - Financie",
-            "format": "numeric"
-          },
-          {
-            "text": "2019-06-08",
-            "format": "numeric"
-          }
-        ],
-        [
-          {
-            "text": "Web slovensko.sk"
-          },
-          {
-            "text": "Občan - Financie",
-            "format": "numeric"
-          },
-          {
-            "text": "2019-06-08",
-            "format": "numeric"
-          }
-        ],
-        [
-          {
-            "text": "Web slovensko.sk"
-          },
-          {
-            "text": "Občan - Financie",
-            "format": "numeric"
-          },
-          {
-            "text": "2019-06-08",
-            "format": "numeric"
-          }
-        ],
-        [
-          {
-            "text": "Web slovensko.sk"
-          },
-          {
-            "text": "Občan - Financie",
-            "format": "numeric"
-          },
-          {
-            "text": "2019-06-08",
-            "format": "numeric"
-          }
-        ],
-        [
-          {
-            "text": "Web slovensko.sk"
-          },
-          {
-            "text": "Občan - Financie",
-            "format": "numeric"
-          },
-          {
-            "text": "2019-06-08",
-            "format": "numeric"
-          }
-        ]
-      ]
-    }) }}
+      <table class="govuk-table">
+        <caption class="govuk-table__caption govuk-heading-m">Čo aktuálne riešime</caption>
+        <thead class="govuk-table__head">
+          <tr class="govuk-table__row">
+            <th class="govuk-table__header" scope="col">Podnet</th>
+            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Kategória</th>
+            <th class="govuk-table__header govuk-table__header--numeric" scope="col">Dátum</th>
+          </tr>
+        </thead>
+        <tbody class="govuk-table__body" id="listing"></tbody>
+      </table>
 
-    {{ govukButton({
+      {{ govukButton({
       "text": "Zobraziť viac",
       "href": "/"
     }) }}
 
-  </main>
-</div>
+      <script>
+
+        function search() {
+          const searchURL = "https://lepsiesluzby.sk/jira/rest/api/2/search?jql=project%20%3D%20SDM%20%20AND%20component%20%3D%20e-services%20ORDER%20BY%20created%20DESC&fields=summary,created,customfield_10204&maxResults=5";
+
+          const categoryName = (issue) => {
+            if (issue && issue.fields && issue.fields.customfield_10204) {
+
+              if (issue.fields.customfield_10204.child) {
+                return `${issue.fields.customfield_10204.value} - ${issue.fields.customfield_10204.child.value}`
+              } else {
+                return `${issue.fields.customfield_10204.value}`
+              }
+            }
+            return ""
+          }
+
+          const createTableHtml = ({summary, category, date}) => {
+            const dateObj = new Date(date);
+            const niceDate = `${dateObj.getDate()}. ${dateObj.getMonth() + 1}. ${dateObj.getFullYear()}`
+            return `<tr class="govuk-table__row">
+              <th class="govuk-table__header" scope="row">${summary}</th>
+              <td class="govuk-table__cell govuk-table__cell--numeric">${category}</td>
+              <td class="govuk-table__cell govuk-table__cell--numeric">${niceDate}</td>
+            </tr>`
+          }
+
+          const table = document.getElementById('listing')
+          const appendToTable = (html) => {
+            table.insertAdjacentHTML('beforeend', html);
+          }
+
+          const searchSuccess = (response) => {
+            response
+              .json()
+              .then(data => data.issues.map(issue => ({url: issue.self, summary: issue.fields.summary, category: categoryName(issue), date: issue.fields.created})))
+              .then(issues => {
+                issues.forEach(issue => appendToTable(createTableHtml(issue)))
+              })
+          };
+          fetch(searchURL).then(searchSuccess)
+        }
+        search();
+      </script>
+
+    </main>
+  </div>
 
 {% endblock %}
