@@ -6,49 +6,50 @@
 
 {% block main %}
 
-  <form action="search" method="post" id="form">
-    {{ govukInput({
-  "label": {"text": "Zadajte meno"},
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
+      <form action="search" method="post" id="form">
+        {{ govukInput({
+  "label": {"text": "Zadajte meno alebo IČO"},
   "id": "input-example",
-  "name": "test-name"
+  "name": "name"
 }) }}
 
-    {{ govukButton({
+        {{ govukButton({
   "text": "Ďalej"
 }) }}
-  </form>
+      </form>
 
-  <script>
-    function init() {
-      const form = document.getElementById("form");
-      form.addEventListener('submit', handleSubmit);
-    }
+      <script src="/public/vendor/app-oznamenie-udajov-rmno/js/storage.js"></script>
+      <script>
+        function init() {
+          const form = document.getElementById("form");
+          form.addEventListener('submit', handleSubmit);
+        }
 
-    function handleSubmit(e) {
-      e.preventDefault();
+        function handleSubmit(e) {
+          e.preventDefault();
 
-      const r = confirm("Nasli moji radcove?")
+          storage.edit((data) => {
+            data['org']['name'] = e
+              .target['name']
+              .value
+            return data;
+          })
 
-      if (r) {
-        window.location = "screen-5-org-unit";
-      } else {
-        window.location = "screen-3-org-type";
-      }
+          const r = confirm("Nasli moji radcove?")
 
-    }
-    init();
-  </script>
+          if (r) {
+            window.location = "screen-5-org-unit";
+          } else {
+            window.location = "screen-3-org-type";
+          }
 
-  {# 
-  {{ govukButton({
-  "text": "Nasli sme vase data! :)",
-  "href": "screen-5-org-unit",
-  "classes": "govuk-button--start"
-}) }}
+        }
+        init();
+      </script>
 
-  {{ govukButton({
-  "text": "Nenasli sme vase data! :)",
-  "href": "screen-3-org-type"
-}) }} #}
-
+    </div>
+  </div>
 {% endblock %}

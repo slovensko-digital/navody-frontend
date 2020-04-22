@@ -6,6 +6,9 @@
 
 {% block main %}
 
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+
   <h1 class="govuk-heading-l">PDF - oznamenie statutarov</h1>
 
   <form>
@@ -29,4 +32,20 @@
   "href": "screen-9-paper-send"
 }) }}
 
+
+  {{ govukButton({
+  "text": "Generuj PDF",
+  "classes": "getpdf"
+}) }}
+
+{# <button id="getpdf">Click Me</button> #}
+
+<script src="/public/vendor/app-oznamenie-udajov-rmno/js/storage.js"></script>
+<script src="/public/vendor/app-oznamenie-udajov-rmno/js/pdfmake.min.js"></script>
+<script src="/public/vendor/app-oznamenie-udajov-rmno/js/vfs_fonts.js"></script>
+<script src="/public/vendor/app-oznamenie-udajov-rmno/js/create-pdf.js"></script>
+
+
+    </div>
+  </div>
 {% endblock %}
