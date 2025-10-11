@@ -26,6 +26,13 @@ Najnovší sass build spolu s js sa nachádza v adresári `/package`. Na použit
 
 Skvelé! Vyberte si [issue](https://github.com/slovensko-digital/navody-frontend/issues), na ktorej chcete pracovať a ozvite sa nám na [Slacku](https://slovensko-digital.slack.com/messages/CEGR9AZT5), kde sa dohodneme na postupe.
 
+### 4. Development
+
+    docker-compose run -p 3000:3000 app bash
+    npm start
+
+Otvorte si projekt na lokálnej adrese http://localhost:3000 
+
 ## Licencia
 
 Ak nie je uvedené inakšie, kódy sú publikované s MIT License. Toto zahŕňa kódy aj ukážky kódov v dokumentácii.
