@@ -1,0 +1,13 @@
+services:
+  app:
+    build: .
+    volumes:
+      - .:/app
+    working_dir: /app
+    ports:
+      - "3000:3000"
+    command: bash -c "npm install && npm start"
+    stdin_open: true
+    tty: true
+    environment:
+      - NODE_ENV=development
