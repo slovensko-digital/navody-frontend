@@ -1,0 +1,4 @@
+@use "grid.mixin" as grid;
+@use "../custom-properties";
+
+@include grid.styles;

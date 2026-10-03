@@ -1,0 +1,136 @@
+{% from "govuk/components/back-link/macro.njk" import govukBackLink %}
+
+{% extends "layouts/examples.njk" %}
+
+{% block containerStart %}
+  {{ govukBackLink({
+    href: "/"
+  }) }}
+{% endblock %}
+
+{% set organisations = {
+  "attorney-generals-office": {
+    "name": "Attorney General's Office",
+    "start": 1315
+  },
+  "cabinet-office": {
+    "name": "Cabinet Office",
+    "start": 1916
+  },
+  "civil-service": {
+    "name": "Civil Service"
+  },
+  "department-for-business-innovation-science-trade": {
+    "name": "Department for Business, Innovation, Science and Trade",
+    "start": 2023
+  },
+  "department-for-digital-culture-media-sport": {
+    "name": "Department for Digital, Culture, Media and Sport",
+    "start": 1997
+  },
+  "department-for-education": {
+    "name": "Department for Education",
+    "start": 2010
+  },
+  "department-for-energy-security-net-zero": {
+    "name": "Department for Energy Security and Net Zero",
+    "start": 2023
+  },
+  "department-for-environment-food-rural-affairs": {
+    "name": "Department for Environment, Food and Rural Affairs",
+    "start": 2001
+  },
+  "department-for-transport": {
+    "name": "Department for Transport",
+    "start": 2002
+  },
+  "department-for-work-pensions": {
+    "name": "Department for Work and Pensions",
+    "start": 2001
+  },
+  "department-of-health-social-care": {
+    "name": "Department of Health and Social Care",
+    "start": 2018
+  },
+  "foreign-commonwealth-development-office": {
+    "name": "Foreign, Commonwealth and Development Office",
+    "start": 2020
+  },
+  "hm-government": {
+    "name": "HM Government",
+    "start": 1707
+  },
+  "hm-revenue-customs": {
+    "name": "HM Revenue and Customs",
+    "start": 2005
+  },
+  "hm-treasury": {
+    "name": "HM Treasury"
+  },
+  "home-office": {
+    "name": "Home Office",
+    "start": 1782
+  },
+  "ministry-of-defence": {
+    "name": "Ministry of Defence",
+    "start": 1964
+  },
+  "ministry-of-housing-communities-local-government": {
+    "name": "Ministry of Housing, Communities and Local Government",
+    "start": 2018
+  },
+  "ministry-of-justice": {
+    "name": "Ministry of Justice",
+    "start": 2007
+  },
+  "northern-ireland-office": {
+    "name": "Northern Ireland Office",
+    "start": 1972
+  },
+  "office-of-the-advocate-general-for-scotland": {
+    "name": "Office of the Advocate General for Scotland",
+    "start": 1999
+  },
+  "office-of-the-leader-of-the-house-of-commons": {
+    "name": "Office of the Leader of the House of Commons",
+    "start": 1721
+  },
+  "office-of-the-leader-of-the-house-of-lords": {
+    "name": "Office of the Leader of the House of Lords",
+    "start": 1721
+  },
+  "prime-ministers-office-10-downing-street": {
+    "name": "Prime Minister's Office, 10 Downing Street",
+    "start": 2022
+  },
+  "scotland-office": {
+    "name": "Scotland Office",
+    "start": 1999
+  },
+  "uk-export-finance": {
+    "name": "UK Export Finance",
+    "start": 1919
+  },
+  "wales-office": {
+    "name": "Wales Office",
+    "start": 1999
+  }
+} %}
+
+{% block content %}
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h1 class="govuk-heading-xl">
+        Organisation colours
+      </h1>
+      <p class="govuk-body">Only includes organisations and departments that existed from 2010 onwards.</p>
+
+      {%- for key, data in organisations %}
+        <div class="app-organisation-swatch app-organisation-swatch--{{ key }}">
+          <h2 class="govuk-heading-s">{{ data.name }}</h2>
+          <p class="govuk-body">{{ data.start | default("????") }}&ndash;{{ data.end }}</p>
+        </div>
+      {%- endfor %}
+    </div>
+  </div>
+{% endblock %}

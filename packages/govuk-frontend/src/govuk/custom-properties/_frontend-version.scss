@@ -1,0 +1,3 @@
+@use "frontend-version.mixin" as frontend-version;
+
+@include frontend-version.styles;

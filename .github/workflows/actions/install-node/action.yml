@@ -1,0 +1,39 @@
+name: Install dependencies
+
+runs:
+  using: composite
+
+  steps:
+    - name: Cache dependencies
+      uses: actions/cache@v6.1.0
+      id: npm-install-cache
+
+      with:
+        # Use faster GNU tar for all runners
+        enableCrossOsArchive: true
+
+        # Restore `node_modules` cache (unless packages change)
+        key: npm-install-${{ runner.os }}-${{ hashFiles('package-lock.json', '**/package.json') }}
+        path: |
+          node_modules
+          shared/github-scripts/node_modules
+          docs/examples/*/node_modules
+          packages/*/node_modules
+          shared/*/node_modules
+          tests/*/node_modules
+
+    - name: Setup Node.js
+      uses: ./.github/workflows/actions/setup-node
+      id: setup-node
+
+      with:
+        # Restore global `~/.npm` cache (unless packages change)
+        use-cache: ${{ steps.npm-install-cache.outputs.cache-hit != 'true' }}
+
+    - name: Install dependencies
+      id: install-node
+
+      # Skip install when dependencies are cached
+      if: steps.npm-install-cache.outputs.cache-hit != 'true'
+      shell: bash
+      run: npm ci

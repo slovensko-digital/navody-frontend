@@ -1,37 +1,8 @@
 ## Application architecture
 
-- `app/`
-
-  [Express](https://github.com/expressjs/express) application to preview components; also referred to as _preview app_.
-
-  - `assets/`
-
-    App-specific assets.
-
-  - `views/`
-
-    [Nunjucks](https://github.com/mozilla/nunjucks) template files.
-
-    - `examples/`
-
-      Examples of components usage in various contexts. You can access these examples from the home page of the preview app.
-
-    - `layouts/`
-
-      Generic layout templates used to render preview app pages.
-
-    - `partials/`
-
-      Reusable blocks of template code.
-
 - `bin/`
 
   Binary/executable files (i.e. bash scripts) mainly used in the [publishing process](/docs/releasing/publishing.md).
-
-- `config/`
-
-  Configuration files for the preview app and [Jest](https://github.com/facebook/jest).
-
 
 - `dist/` **contains auto-generated files**
 
@@ -41,26 +12,76 @@
 
   Documentation files.
 
-- `lib/`
+- `packages/`
+  - `govuk-frontend-review/`
 
-  Application modules and helpers.
+    [Express.js](https://github.com/expressjs/express) review app [deployed to Heroku](https://govuk-frontend-review.herokuapp.com) with configuration in [app.json](/app.json) and [Procfile](/Procfile).
+    - `dist/` **contains auto-generated files**
 
-- `package/` **contains auto-generated files**
+      Builds of govuk-frontend-review served by [Express.js](https://github.com/expressjs/express).
 
-  package published on npm.
-  Consume all of govuk-frontend through a single package.
+    - `src/`
 
-- `src/`
+      Source files for component previews and examples.
 
-  Source files. See README.md in the src directory for details.
+    - `tasks/`
 
-- `tasks/`
+      Read about [npm and Gulp tasks](tasks.md) or list workspace specific Gulp tasks using:
 
-  Application modules and helpers. See [tasks](tasks.md) for more information about the tasks.
+      ```shell
+      npx --workspace @govuk-frontend/review -- gulp --tasks
+      ```
 
+  - `govuk-frontend/`
 
-### Auto-generated directories
+    Package published on npm.
+    Consume all of govuk-frontend through a single package.
+    - `dist/` **contains auto-generated files**
 
-- `public/`
+      Builds of govuk-frontend published and exported from the npm package.
 
-  Assets built for the preview app.
+    - `src/`
+
+      Source files. See [README.md](/packages/govuk-frontend/src/README.md) in the src directory for details.
+
+    - `tasks/`
+
+      Read about [npm and Gulp tasks](tasks.md) or list workspace specific Gulp tasks using:
+
+      ```shell
+      npx --workspace govuk-frontend -- gulp --tasks
+      ```
+
+- `shared/`
+
+  Shared packages used by tests, build tools and the [review app](/packages/govuk-frontend-review).
+  - `config/`
+
+    Configuration files for common paths and port numbers.
+
+  - `helpers/`
+
+    [Jest](https://github.com/facebook/jest) and development helpers.
+
+  - `lib/`
+
+    Shared libraries for directory listings, component data, naming conventions.
+
+  - `stats/`
+
+    File size measurement and module breakdown of built files
+
+  - `tasks/`
+
+    Read about [npm and Gulp tasks](tasks.md) for more information about the tasks.
+
+- `tests/`
+
+  Tests that consume GOV.UK Frontend as a package
+  - `bundler-integrations`
+
+    Confirm that GOV.UK Frontend's JavaScript enhancements compile as intended with popular bundlers like Rollup, Webpack and Vite.
+
+  - `sass-tests`
+
+    Confirm Sass compilation output for various ways of importing GOV.UK Frontend

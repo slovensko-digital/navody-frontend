@@ -1,0 +1,776 @@
+params:
+  - name: id
+    type: string
+    required: true
+    description: This is used for the main component and to compose the ID attribute for each item.
+  - name: namePrefix
+    type: string
+    required: false
+    description: Optional prefix. This is used to prefix each item `name`, separated by `-`.
+  - name: items
+    type: array
+    required: false
+    description: The inputs within the date input component.
+    params:
+      - name: id
+        type: string
+        required: false
+        description: Item-specific ID. If provided, it will be used instead of the generated ID.
+      - name: name
+        type: string
+        required: true
+        description: Item-specific name attribute.
+      - name: label
+        type: string
+        required: false
+        description: Item-specific label text. If provided, this will be used instead of `name` for item label text.
+      - name: value
+        type: string
+        required: false
+        description: If provided, it will be used as the initial value of the input.
+      - name: error
+        type: boolean
+        required: false
+        description: If set to `true`, it will show a red error border on the item input. If provided, you must set the top-level `errorMessage` option to add an error message to the date input component.
+      - name: autocomplete
+        type: string
+        required: false
+        description: 'Attribute to meet [WCAG success criterion 1.3.5: Identify input purpose](https://www.w3.org/WAI/WCAG22/Understanding/identify-input-purpose.html), for instance `"bday-day"`. See the [Autofill section in the HTML standard](https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#autofill) section in the HTML standard for full list of attributes that can be used.'
+      - name: pattern
+        type: string
+        required: false
+        description: Attribute to [provide a regular expression pattern](https://html.spec.whatwg.org/multipage/input.html#the-pattern-attribute), used to match allowed character combinations for the input value.
+      - name: classes
+        type: string
+        required: false
+        description: Classes to add to date input item.
+      - name: attributes
+        type: object
+        required: false
+        description: HTML attributes (for example data attributes) to add to the date input tag.
+  - name: hint
+    type: object
+    required: false
+    description: Can be used to add a hint to a date input component.
+    isComponent: true
+  - name: errorMessage
+    type: object
+    required: false
+    description: Can be used to add an error message to the date input component. The error message component will not display if you use a falsy value for `errorMessage`, for example `false` or `null`.
+    isComponent: true
+  - name: formGroup
+    type: object
+    required: false
+    description: Additional options for the form group containing the date input component.
+    params:
+      - name: classes
+        type: string
+        required: false
+        description: Classes to add to the form group (for example to show error state for the whole group).
+      - name: attributes
+        type: object
+        required: false
+        description: HTML attributes (for example data attributes) to add to the form group.
+      - name: beforeInputs
+        type: object
+        required: false
+        description: Content to add before the inputs used by the date input component.
+        params:
+          - name: text
+            type: string
+            required: true
+            description: Text to add before the inputs. If `html` is provided, the `text` option will be ignored.
+          - name: html
+            type: string
+            required: true
+            description: HTML to add before the inputs. If `html` is provided, the `text` option will be ignored.
+      - name: afterInputs
+        type: object
+        required: false
+        description: Content to add after the inputs used by the date input component.
+        params:
+          - name: text
+            type: string
+            required: true
+            description: Text to add after the inputs. If `html` is provided, the `text` option will be ignored.
+          - name: html
+            type: string
+            required: true
+            description: HTML to add after the inputs. If `html` is provided, the `text` option will be ignored.
+  - name: fieldset
+    type: object
+    required: false
+    description: Can be used to add a fieldset to the date input component.
+    isComponent: true
+  - name: day
+    type: object
+    required: false
+    description: Options for the day input within the date input component. See items.
+  - name: month
+    type: object
+    required: false
+    description: Options for the month input within the date input component. See items.
+  - name: year
+    type: object
+    required: false
+    description: Options for the year input within the date input component. See items.
+  - name: values
+    type: object
+    required: false
+    description: Specify `value` attributes for the date parts without setting items. You can also use the `name` for the fields as keys, including any `namePrefix`.
+    params:
+      - name: day
+        type: string
+        required: false
+        description: The `value` attribute for the day input.
+      - name: month
+        type: string
+        required: false
+        description: The `value` attribute for the month input.
+      - name: year
+        type: string
+        required: false
+        description: The `value` attribute for the year input.
+  - name: classes
+    type: string
+    required: false
+    description: Classes to add to the date-input container.
+  - name: attributes
+    type: object
+    required: false
+    description: HTML attributes (for example data attributes) to add to the date-input container.
+
+examples:
+  - name: default
+    screenshot: true
+    options:
+      id: dob
+      fieldset:
+        legend:
+          text: What is your date of birth?
+      hint:
+        text: For example, 31 3 1980
+  - name: with translations
+    options:
+      id: with-translations
+      fieldset:
+        legend:
+          text: Pryd gafodd eich pasbort ei gyhoeddi?
+      hint:
+        text: Er enghraifft, 27 3 2007
+      day:
+        label: Dydd
+      month:
+        label: Mis
+      year:
+        label: Blwyddyn
+  - name: with values
+    options:
+      id: with-values
+      fieldset:
+        legend:
+          text: What is your date of birth?
+      hint:
+        text: For example, 31 3 1980
+      values:
+        day: 31
+        month: 3
+        year: 1980
+  - name: with values and name prefix
+    options:
+      id: with-values-name-prefix
+      namePrefix: dob
+      fieldset:
+        legend:
+          text: What is your date of birth?
+      hint:
+        text: For example, 31 3 1980
+      values:
+        dob-day: 31
+        dob-month: 3
+        dob-year: 1980
+  - name: with values, name prefix and custom names
+    options:
+      id: with-values-name-prefix-custom
+      namePrefix: dob
+      fieldset:
+        legend:
+          text: What is your date of birth?
+      hint:
+        text: For example, 31 3 1980
+      day:
+        label: Day
+        name: user1-day
+      month:
+        label: Month
+        name: user1-month
+      year:
+        label: Year
+        name: user1-year
+      values:
+        dob-user1-day: 31
+        dob-user1-month: 3
+        dob-user1-year: 1980
+  - name: day and month
+    options:
+      id: bday
+      namePrefix: bday
+      fieldset:
+        legend:
+          text: What is your birthday?
+      hint:
+        text: For example, 5 12
+      year: false
+  - name: day and month (using items)
+    options:
+      id: bday
+      namePrefix: bday
+      fieldset:
+        legend:
+          text: What is your birthday?
+      hint:
+        text: For example, 5 12
+      items:
+        - name: day
+          classes: govuk-input--width-2
+        - name: month
+          classes: govuk-input--width-2
+  - name: month and year
+    options:
+      id: dob
+      namePrefix: dob
+      fieldset:
+        legend:
+          text: When did you move to this property?
+      hint:
+        text: For example, 3 1980
+      day: false
+  - name: month and year (using items)
+    options:
+      id: dob
+      namePrefix: dob
+      fieldset:
+        legend:
+          text: When did you move to this property?
+      hint:
+        text: For example, 3 1980
+      items:
+        - name: month
+          classes: govuk-input--width-2
+        - name: year
+          classes: govuk-input--width-4
+  - name: with errors only
+    options:
+      id: dob-errors
+      fieldset:
+        legend:
+          text: What is your date of birth?
+      day:
+        error: true
+      month:
+        error: true
+      year:
+        error: true
+  - name: with errors only (using classes)
+    options:
+      id: dob-errors
+      fieldset:
+        legend:
+          text: What is your date of birth?
+      day:
+        classes: govuk-input--error
+      month:
+        classes: govuk-input--error
+      year:
+        classes: govuk-input--error
+  - name: with errors only (using items)
+    options:
+      id: dob-errors
+      fieldset:
+        legend:
+          text: What is your date of birth?
+      items:
+        - name: day
+          classes: govuk-input--width-2
+          error: true
+        - name: month
+          classes: govuk-input--width-2
+          error: true
+        - name: year
+          classes: govuk-input--width-4
+          error: true
+  - name: with errors only (using items and classes)
+    options:
+      id: dob-errors
+      fieldset:
+        legend:
+          text: What is your date of birth?
+      items:
+        - name: day
+          classes: govuk-input--width-2 govuk-input--error
+        - name: month
+          classes: govuk-input--width-2 govuk-input--error
+        - name: year
+          classes: govuk-input--width-4 govuk-input--error
+  - name: with error message and hint
+    options:
+      id: dob-errors
+      fieldset:
+        legend:
+          text: What is your date of birth?
+      hint:
+        text: For example, 31 3 1980
+      errorMessage:
+        text: Error message goes here
+  - name: with error message and hint (using items)
+    options:
+      id: dob-errors
+      fieldset:
+        legend:
+          text: What is your date of birth?
+      hint:
+        text: For example, 31 3 1980
+      errorMessage:
+        text: Error message goes here
+      items:
+        - name: day
+          classes: govuk-input--width-2
+        - name: month
+          classes: govuk-input--width-2
+        - name: year
+          classes: govuk-input--width-4
+  - name: with error on day input
+    options:
+      id: dob-day-error
+      fieldset:
+        legend:
+          text: What is your date of birth?
+      hint:
+        text: For example, 31 3 1980
+      errorMessage:
+        text: Error message goes here
+      day:
+        error: true
+  - name: with error on day input (using items)
+    options:
+      id: dob-day-error
+      fieldset:
+        legend:
+          text: What is your date of birth?
+      hint:
+        text: For example, 31 3 1980
+      errorMessage:
+        text: Error message goes here
+      items:
+        - name: day
+          classes: govuk-input--width-2
+          error: true
+        - name: month
+          classes: govuk-input--width-2
+        - name: year
+          classes: govuk-input--width-4
+  - name: with error on month input
+    options:
+      id: dob-month-error
+      fieldset:
+        legend:
+          text: What is your date of birth?
+      hint:
+        text: For example, 31 3 1980
+      errorMessage:
+        text: Error message goes here
+      month:
+        error: true
+  - name: with error on month input (using items)
+    options:
+      id: dob-month-error
+      fieldset:
+        legend:
+          text: What is your date of birth?
+      hint:
+        text: For example, 31 3 1980
+      errorMessage:
+        text: Error message goes here
+      items:
+        - name: day
+          classes: govuk-input--width-2
+        - name: month
+          classes: govuk-input--width-2
+          error: true
+        - name: year
+          classes: govuk-input--width-4
+  - name: with error on year input
+    options:
+      id: dob-year-error
+      fieldset:
+        legend:
+          text: What is your date of birth?
+      hint:
+        text: For example, 31 3 1980
+      errorMessage:
+        text: Error message goes here
+      year:
+        error: true
+  - name: with error on year input (using items)
+    options:
+      id: dob-year-error
+      fieldset:
+        legend:
+          text: What is your date of birth?
+      hint:
+        text: For example, 31 3 1980
+      errorMessage:
+        text: Error message goes here
+      items:
+        - name: day
+          classes: govuk-input--width-2
+        - name: month
+          classes: govuk-input--width-2
+        - name: year
+          classes: govuk-input--width-4
+          error: true
+
+  # Hidden examples are not shown in the review app, but are used for tests and HTML fixtures
+  - name: classes
+    hidden: true
+    options:
+      id: with-classes
+      classes: app-date-input--custom-modifier
+  - name: attributes
+    hidden: true
+    options:
+      id: with-attributes
+      attributes:
+        data-attribute: my data value
+  - name: with items
+    hidden: false
+    options:
+      id: dob
+      namePrefix: dob
+      fieldset:
+        legend:
+          text: What is your date of birth?
+      hint:
+        text: For example, 31 3 1980
+      items:
+        - name: day
+          classes: govuk-input--width-2
+        - name: month
+          classes: govuk-input--width-2
+        - name: year
+          classes: govuk-input--width-4
+  - name: with empty items
+    hidden: true
+    options:
+      id: with-empty-items
+      items: []
+  - name: custom pattern
+    hidden: true
+    options:
+      id: with-custom-pattern
+      items:
+        - name: day
+          pattern: '[0-8]*'
+  - name: custom inputmode
+    hidden: true
+    options:
+      id: with-custom-inputmode
+      items:
+        - name: day
+          pattern: '[0-9X]*'
+          inputmode: 'text'
+  - name: with nested name
+    hidden: true
+    options:
+      id: with-nested-name
+      items:
+        - name: day[dd]
+        - name: month[mm]
+        - name: year[yyyy]
+  - name: with id on items
+    hidden: true
+    options:
+      id: with-item-id
+      items:
+        - id: day
+          name: day
+        - id: month
+          name: month
+        - id: year
+          name: year
+  - name: suffixed id
+    hidden: true
+    options:
+      id: my-date-input
+      items:
+        - name: day
+        - name: month
+        - name: year
+  - name: with item value
+    hidden: true
+    options:
+      id: with-item-value
+      items:
+        - id: day
+          name: day
+        - id: month
+          name: month
+        - id: year
+          name: year
+          value: 2018
+  - name: with field value
+    hidden: true
+    options:
+      id: with-field-value
+      year:
+        value: 2023
+  - name: with field value and items
+    hidden: true
+    options:
+      id: with-field-value-items
+      items:
+        - id: day
+          name: day
+        - id: month
+          name: month
+        - id: year
+          name: year
+      year:
+        value: 2023
+  - name: with field value and item value
+    hidden: true
+    options:
+      id: with-field-value-item-value
+      items:
+        - id: day
+          name: day
+        - id: month
+          name: month
+        - id: year
+          name: year
+          value: 2018
+      year:
+        value: 2023
+  - name: with field value, item value and values
+    hidden: true
+    options:
+      id: with-field-value-item-value-values
+      items:
+        - id: day
+          name: day
+        - id: month
+          name: month
+        - id: year
+          name: year
+          value: 2018
+      year:
+        value: 2023
+      values:
+        year: 2026
+  - name: with field value overriding values
+    hidden: true
+    options:
+      id: with-field-value-values
+      year:
+        value: 2023
+      values:
+        year: 2026
+  - name: with hint and described by
+    hidden: true
+    options:
+      id: dob-errors
+      fieldset:
+        describedBy: test-target-element
+        legend:
+          text: What is your date of birth?
+      hint:
+        text: For example, 31 3 1980
+  - name: with error message and described by
+    hidden: true
+    options:
+      id: dob-errors
+      fieldset:
+        describedBy: test-target-element
+        legend:
+          text: What is your date of birth?
+      errorMessage:
+        text: Error message goes here
+  - name: with error on single field
+    hidden: true
+    options:
+      id: dob-errors
+      fieldset:
+        legend:
+          text: What is your date of birth?
+      hint:
+        text: For example, 31 3 1980
+      errorMessage:
+        text: Error message goes here
+      day:
+        error: true
+  - name: with error on single field by omission
+    hidden: true
+    options:
+      id: dob-errors
+      fieldset:
+        legend:
+          text: What is your date of birth?
+      hint:
+        text: For example, 31 3 1980
+      errorMessage:
+        text: Error message goes here
+      month:
+        error: false
+      year:
+        error: false
+  - name: with error on single field using classes
+    hidden: true
+    options:
+      id: dob-errors
+      fieldset:
+        legend:
+          text: What is your date of birth?
+      hint:
+        text: For example, 31 3 1980
+      errorMessage:
+        text: Error message goes here
+      day:
+        classes: govuk-input--error
+  - name: with error on single item
+    hidden: true
+    options:
+      id: dob-errors
+      fieldset:
+        legend:
+          text: What is your date of birth?
+      hint:
+        text: For example, 31 3 1980
+      errorMessage:
+        text: Error message goes here
+      items:
+        - name: day
+          classes: govuk-input--width-2
+          error: true
+        - name: month
+          classes: govuk-input--width-2
+        - name: year
+          classes: govuk-input--width-4
+  - name: with error on single item by omission
+    hidden: true
+    options:
+      id: dob-errors
+      fieldset:
+        legend:
+          text: What is your date of birth?
+      hint:
+        text: For example, 31 3 1980
+      errorMessage:
+        text: Error message goes here
+      items:
+        - name: day
+          classes: govuk-input--width-2
+        - name: month
+          classes: govuk-input--width-2
+          error: false
+        - name: year
+          classes: govuk-input--width-4
+          error: false
+  - name: with error on single item using classes
+    hidden: true
+    options:
+      id: dob-errors
+      fieldset:
+        legend:
+          text: What is your date of birth?
+      hint:
+        text: For example, 31 3 1980
+      errorMessage:
+        text: Error message goes here
+      items:
+        - name: day
+          classes: govuk-input--width-2 govuk-input--error
+        - name: month
+          classes: govuk-input--width-2
+        - name: year
+          classes: govuk-input--width-4
+  - name: fieldset html
+    hidden: true
+    options:
+      id: with-fieldset-html
+      fieldset:
+        legend:
+          html: What is your <b>date of birth</b>?
+  - name: items with classes
+    hidden: true
+    options:
+      id: with-item-classes
+      items:
+        - name: day
+          classes: app-date-input__day
+        - name: month
+          classes: app-date-input__month
+        - name: year
+          classes: app-date-input__year
+  - name: items without classes
+    hidden: true
+    options:
+      id: without-item-classes
+      items:
+        - name: day
+        - name: month
+        - name: year
+  - name: with optional form-group classes
+    hidden: true
+    options:
+      id: dob
+      namePrefix: dob
+      fieldset:
+        legend:
+          text: What is your date of birth?
+      hint:
+        text: For example, 31 3 1980
+      formGroup:
+        classes: extra-class
+  - name: with autocomplete values
+    hidden: true
+    options:
+      id: dob-with-autocomplete-attribute
+      namePrefix: dob-with-autocomplete
+      fieldset:
+        legend:
+          text: What is your date of birth?
+      hint:
+        text: For example, 31 3 1980
+      items:
+        - name: day
+          classes: govuk-input--width-2
+          autocomplete: bday-day
+        - name: month
+          classes: govuk-input--width-2
+          autocomplete: bday-month
+        - name: year
+          classes: govuk-input--width-4
+          autocomplete: bday-year
+  - name: with input attributes
+    hidden: true
+    options:
+      id: dob-with-input-attributes
+      namePrefix: dob-with-input-attributes
+      fieldset:
+        legend:
+          text: What is your date of birth?
+      hint:
+        text: For example, 31 3 1980
+      items:
+        - name: day
+          classes: govuk-input--width-2
+          attributes:
+            data-example-day: day
+        - name: month
+          classes: govuk-input--width-2
+          attributes:
+            data-example-month: month
+        - name: year
+          classes: govuk-input--width-4
+          attributes:
+            data-example-year: year

@@ -1,43 +1,101 @@
 name: Sass
 
-on: [push, pull_request]
+on:
+  pull_request:
+
+  push:
+    branches:
+      - main
+      - master
+      - 'feature/**'
+      - 'support/**'
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: sass-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
 
 jobs:
   dart-sass:
-    name: Dart Sass v1.0.0
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
-        with:
-          node-version: 8 # v8 required for sass v1.0.0
-      - run: |
-          npm install -g sass@v1.0.0
-          sass --version
-      - run: time sass src/govuk/all.scss > /dev/null
+    name: Dart Sass v1.79.0
+    runs-on: ubuntu-24.04
 
-  lib-sass:
-    name: LibSass v3.3.0 (deprecated)
-    runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
-        with:
-          node-version: 4 # v4 required for node-sass v3.4.0
-      - run: |
-          npm install -g node-sass@v3.4.0
-          node-sass --version
-      - run: time node-sass src/govuk/all.scss > /dev/null
+      - name: Checkout code
+        uses: actions/checkout@v7.0.1
 
-  ruby-sass:
-    name: Ruby Sass v3.4.0 (deprecated)
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: ruby/setup-ruby@v1
+      - name: Setup Node.js
+        uses: actions/setup-node@v7.0.0
         with:
-          ruby-version: 2.1.9 # Oldest version available on ruby/setup-ruby
-      - run: |
-          gem install sass -v 3.4.0
+          cache: npm
+          node-version: 18 # Node.js 18 is the oldest supported by Dart Sass v1.79.0
+
+      - name: Install package
+        run: |
+          npm install -g sass@v1.79.0
           sass --version
-      - run: time sass src/govuk/all.scss > /dev/null
+
+      - name: Run command
+        run: |
+          mkdir -p .tmp
+          time sass packages/govuk-frontend/src/govuk/index.scss > .tmp/index.css
+
+      # Check output for uncompiled Sass
+      - name: Check output
+        run: |
+          ! grep "\$govuk-" .tmp/index.css
+
+      - name: Save compiled Sass
+        uses: actions/upload-artifact@v7.0.1
+        if: ${{ !cancelled() }}
+        with:
+          name: Dart Sass v1.79.0 output
+          path: .tmp/index.css
+          if-no-files-found: ignore
+
+  dart-sass-latest:
+    name: Dart Sass v1 (latest)
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v7.0.1
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7.0.0
+        with:
+          cache: npm
+          node-version-file: .nvmrc # Node.js project version must support Dart Sass v1
+
+      - name: Install package
+        run: |
+          npm install -g sass@v1
+          sass --version
+
+        # Treat GOV.UK Frontend as a dependency by importing it via load paths,
+        # allowing us to mimic the way we recommend our users silence deprecation
+        # warnings using the `quiet-deps` flag.
+        #
+        # Run the command through a shell to ensure `time` measures the time
+        # taken by the entire pipeline, as we are now piping input into `sass`.
+      - name: Run command
+        run: |
+          mkdir -p .tmp
+          time sh -c 'echo "@import "\""govuk/index"\"";" | sass --stdin --quiet-deps --load-path=packages/govuk-frontend/src > .tmp/index.css'
+
+      # Check output for uncompiled Sass
+      - name: Check output
+        run: |
+          ! grep "\$govuk-" .tmp/index.css
+
+      - name: Save compiled Sass
+        uses: actions/upload-artifact@v7.0.1
+        if: ${{ !cancelled() }}
+        with:
+          name: Dart Sass v1 (latest) output
+          path: .tmp/index.css
+          if-no-files-found: ignore

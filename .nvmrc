@@ -1,1 +1,6 @@
-12.13.1
+24.15
+# When updating this version, remember to update:
+# - the 'engines' fields in the various `package.json` files of the project
+# - `package-lock.json` by running `npm install`
+# - the `[node]` section of the various `.browserslistrc` files of the project
+# - the version on `@types/node` installed in the project with `npm install @types/node@<MAJOR>`

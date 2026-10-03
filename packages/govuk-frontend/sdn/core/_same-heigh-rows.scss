@@ -1,0 +1,14 @@
+@include govuk-exports("sdn/core/same-heigh-rows") {
+  @include govuk-media-query($from: tablet) {
+    .govuk-grid-row-same-height {
+      display: flex;
+
+      div[class*="govuk-grid-column-"] {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: space-between;
+      }
+    }
+  }
+}

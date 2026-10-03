@@ -1,9 +1,11 @@
-# Contributing
+# Contribution guidelines
+
 We love contributions! We've compiled these docs to help you understand our contribution guidelines. If you still have questions, please [contact us](https://design-system.service.gov.uk/#support), we'd be super happy to help.
 
 ## Contents of this file
 
 ### For contributors
+
 - [Code of conduct](#code-of-conduct)
 - [Application architecture](#application-architecture)
 - [Running locally](#running-locally)
@@ -19,14 +21,15 @@ We love contributions! We've compiled these docs to help you understand our cont
 - [Testing a release](#testing-a-release)
 
 ### For maintainers
+
 - [Application tasks](#running-application-tasks)
 - [Deploying](#deploying)
 - [Versioning](#versioning)
 - [Releasing a new version](#releasing-a-new-version)
 
-
 ## Code of Conduct
-Please read [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md) before contributing.
+
+Please read [the `alphagov` CODE_OF_CONDUCT.md](https://github.com/alphagov/.github/blob/main/CODE_OF_CONDUCT.md) before contributing.
 
 ## Application architecture
 
@@ -58,23 +61,21 @@ See our [coding standards for components](/docs/contributing/coding-standards/co
 
 See [testing](/docs/contributing/testing.md).
 
-## Supported browsers
-Your contribution needs to work with certain browsers as set out in [README](README.md#browser-and-assistive-technology-support). See also [supporting Internet Explorer 8](https://frontend.design-system.service.gov.uk/supporting-ie8/).
+## Supported browsers and assistive technology
 
-## Supported assistive technology
-Your contribution needs to work with certain assistive technology as set out in [README](README.md#browser-and-assistive-technology-support).
+Your contribution needs to work with certain browsers and assistive technology as set out in [README](README.md#browser-and-assistive-technology-support).
 
 ## Commit hygiene
 
-Please see our [git style guide](https://github.com/alphagov/styleguides/blob/master/git.md)
-which describes how we prefer git history and commit messages to read.
+Please see our [Git style guide in the 'How to store source code' page of the GDS Way](https://gds-way.digital.cabinet-office.gov.uk/standards/source-code/working-with-git.html#commit-messages), which describes how we prefer Git history and commit messages to read.
 
 ## Updating Changelog
 
 See the versioning documentation for [updating the changelog](/docs/contributing/versioning.md#updating-changelog)
 
 ## Testing a release
-If you need to test a release, for example if you're contributing a new component see [Publishing pre-release of GOV.UK Frontend](/docs/releasing/publishing-a-pre-release.md).
+
+If you need to test a release, for example if you're contributing a new component see [Publishing a preview of GOV.UK Frontend](/docs/releasing/publishing-a-preview.md).
 
 ## Application tasks
 

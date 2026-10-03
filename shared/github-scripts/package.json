@@ -1,0 +1,17 @@
+{
+  "private": true,
+  "name": "@govuk-frontend/workflow-scripts",
+  "description": "GOV.UK Frontend GitHub Actions workflow scripts",
+  "engines": {
+    "node": "^24.11.0",
+    "npm": "^11.6.1 <11.6.3 || ^11.6.4"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@govuk-frontend/config": "*",
+    "@govuk-frontend/lib": "*",
+    "@govuk-frontend/stats": "*",
+    "outdent": "^0.8.0",
+    "semver": "^7.8.1"
+  }
+}

@@ -1,0 +1,10 @@
+{% extends "layouts/layout.njk" %}
+
+{% block container %}
+  <div class="govuk-width-container">
+    {% block containerStart %}{% endblock %}
+  </div>
+  <main class="govuk-main-wrapper {{ mainClasses }}" id="main-content">
+    {% block content %}{% endblock %}
+  </main>
+{% endblock %}

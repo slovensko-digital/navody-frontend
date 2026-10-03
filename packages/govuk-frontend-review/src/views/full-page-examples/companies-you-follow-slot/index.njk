@@ -1,0 +1,95 @@
+---
+title: Companies you follow
+name: Companies you follow (service navigation with slots)
+scenario: |
+  You are a user logged into Companies House WebFiling service, looking at a
+  list of companies you are following.
+notes: Based on Companies House "Find an update company information" service
+---
+
+{% extends "layouts/full-page-example.njk" %}
+
+{% from "govuk/components/button/macro.njk" import govukButton %}
+{% from "govuk/components/breadcrumbs/macro.njk" import govukBreadcrumbs %}
+{% from "govuk/components/service-navigation/macro.njk" import govukServiceNavigation %}
+{% from "govuk/components/phase-banner/macro.njk" import govukPhaseBanner %}
+
+{% set pageTitle = example.title %}
+{% block pageTitle %}{{ pageTitle }} - GOV.UK{% endblock %}
+
+{% block head %}
+  {{ super() }}
+  <style>
+    .app-sign-out {
+      margin-left: auto;
+      padding: 10px 0;
+    }
+    .app-sign-out .govuk-button {
+      margin: 0;
+      width: auto;
+    }
+  </style>
+{% endblock %}
+
+{% set signOutButton %}
+  <li class="govuk-service-navigation__item app-sign-out">
+    {{ govukButton({
+      type: "button",
+      classes: "govuk-button--inverse",
+      text: "Sign out"
+    }) }}
+  </li>
+{% endset %}
+
+{% block govukServiceNavigation %}
+  {{ govukServiceNavigation({
+    serviceName: "Find and update company information",
+    navigation: [
+      {
+        href: '#1',
+        text: 'Search the register'
+      },
+      {
+        href: '#2',
+        text: 'Your details'
+      },
+      {
+        href: '#3',
+        text: 'Your filings'
+      },
+      {
+        href: '#4',
+        text: 'Companies you follow',
+        current: true
+      }
+    ],
+    slots: {
+      navigationEnd: signOutButton
+    }
+  }) }}
+{% endblock %}
+
+{% block headerEnd %}
+  {{ govukPhaseBanner({
+    tag: {
+      text: "Alpha"
+    },
+    html: 'This is a new service. Help us improve it and <a class="govuk-link" href="#">give your feedback by email</a>.'
+  }) }}
+{% endblock %}
+
+{% block containerStart %}
+  {{ govukBreadcrumbs({
+    items: [
+      {
+        text: "Home",
+        href: "#0"
+      }
+    ]
+  }) }}
+{% endblock %}
+
+{% block content %}
+  <h1 class="govuk-heading-xl">Companies you follow</h1>
+  <p class="govuk-body">You are not following any companies.</p>
+{% endblock %}

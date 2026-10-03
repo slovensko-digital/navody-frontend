@@ -1,0 +1,29 @@
+name: Build
+
+runs:
+  using: composite
+
+  steps:
+    - name: Cache build
+      uses: actions/cache@v6.1.0
+      id: build-cache
+
+      with:
+        # Use faster GNU tar for all runners
+        enableCrossOsArchive: true
+
+        # Restore build cache (unless commit SHA changes)
+        key: build-${{ runner.os }}-${{ github.sha }}
+        path: |
+          packages/*/dist
+          shared/*/dist
+
+    - name: Build
+      id: build
+
+      # Skip build when we’ve built this SHA before
+      if: steps.build-cache.outputs.cache-hit != 'true'
+      shell: bash
+
+      # Build all workspaces
+      run: npm run build --workspaces --if-present

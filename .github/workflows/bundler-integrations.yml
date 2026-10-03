@@ -1,0 +1,54 @@
+name: Bundler integrations
+
+on:
+  workflow_call:
+  workflow_dispatch:
+
+jobs:
+  test-tree-shaking:
+    name: Test tree shaking
+    runs-on: ubuntu-24.04
+
+    permissions:
+      contents: read
+
+    env:
+      PUPPETEER_SKIP_DOWNLOAD: true
+
+    strategy:
+      fail-fast: false
+
+      matrix:
+        bundler:
+          - rollup
+          - webpack
+          - vite
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7.0.1
+
+      - name: Restore dependencies
+        uses: ./.github/workflows/actions/install-node
+
+      - name: Build GOV.UK Frontend
+        uses: ./.github/workflows/actions/build
+
+      - name: Build with bundler
+        run: npm run ${{matrix.bundler}} -w @govuk-frontend/bundler-integrations
+
+      # Check output for modules that should not be included
+      - name: Check absence of unused modules in `single-component.js`
+        working-directory: ./tests/bundler-integrations
+        run: |
+          ! grep "Accordion" dist/${{matrix.bundler}}/single-component.js -q
+
+      - name: Check absence of unused utility functions in `single-component.js`
+        working-directory: ./tests/bundler-integrations
+        run: |
+          ! grep "getFragmentFromUrl" dist/${{matrix.bundler}}/single-component.js -q
+
+      - name: Check presence of modules in `initAll.js`
+        working-directory: ./tests/bundler-integrations
+        run: |
+          grep "Accordion" dist/${{matrix.bundler}}/initAll.js -q

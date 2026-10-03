@@ -1,0 +1,120 @@
+import { readFile } from 'fs/promises'
+import { join, parse } from 'path'
+
+import { sass as sassConfig } from '@govuk-frontend/config'
+import { getListing } from '@govuk-frontend/lib/files'
+import PluginError from 'plugin-error'
+import postcss from 'postcss'
+// eslint-disable-next-line import/default
+import postcssrc from 'postcss-load-config'
+import { compileAsync, NodePackageImporter } from 'sass-embedded'
+
+import { assets } from './index.mjs'
+
+/**
+ * Compile Sass to CSS task
+ *
+ * @param {string} pattern - Minimatch pattern
+ * @param {AssetEntry[1]} options - Asset options for stylesheet(s)
+ */
+export async function compile(pattern, options) {
+  const modulePaths = await getListing(pattern, {
+    cwd: options.srcPath
+  })
+
+  try {
+    for (const modulePath of modulePaths) {
+      await compileStylesheet([modulePath, options])
+    }
+  } catch (cause) {
+    throw new PluginError(`styles.compile('${pattern}')`, cause, {
+      // Hide error properties already formatted by Sass
+      showProperties: false
+    })
+  }
+}
+
+/**
+ * Compile Sass to CSS helper
+ *
+ * @param {AssetEntry} assetEntry - Asset entry
+ */
+export async function compileStylesheet([
+  modulePath,
+  { basePath, configPath, srcPath, destPath, filePath }
+]) {
+  const moduleSrcPath = join(srcPath, modulePath)
+  const moduleDestPath = join(
+    destPath,
+    filePath ? filePath(parse(modulePath)) : modulePath
+  )
+
+  let css
+  let map
+
+  /**
+   * Configure PostCSS
+   *
+   * @type {import('postcss').ProcessOptions}
+   */
+  const options = {
+    from: moduleSrcPath,
+    to: moduleDestPath,
+
+    /**
+     * Always generate source maps for either:
+     *
+     * 1. PostCSS on Sass compiler result
+     * 2. PostCSS on Sass sources (Autoprefixer only)
+     */
+    map: moduleDestPath.endsWith('.css')
+      ? {
+          annotation: true,
+          inline: false
+        }
+      : false
+  }
+
+  // Compile Sass to CSS
+  if (moduleDestPath.endsWith('.css')) {
+    ;({ css, sourceMap: map } = await compileAsync(moduleSrcPath, {
+      alertColor: true,
+
+      // Turn off dependency warnings
+      ...sassConfig.deprecationOptions,
+
+      // Enable source maps
+      sourceMap: true,
+      sourceMapIncludeSources: true,
+
+      importers: [new NodePackageImporter()],
+
+      verbose: true
+    }))
+
+    // Pass source maps to PostCSS
+    if (typeof options.map === 'object') {
+      options.map.prev = map
+    }
+  }
+
+  if (!css) {
+    css = await readFile(moduleSrcPath)
+  }
+
+  // Locate PostCSS config
+  const config = await postcssrc(options, configPath)
+
+  // Transform with PostCSS
+  const result = await postcss(config.plugins).process(css, {
+    ...options,
+    ...config.options
+  })
+
+  // Write to files
+  await assets.write(moduleDestPath, result)
+}
+
+/**
+ * @import { AssetEntry } from './assets.mjs'
+ */

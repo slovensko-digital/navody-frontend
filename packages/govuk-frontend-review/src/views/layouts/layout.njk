@@ -1,0 +1,23 @@
+{% extends "layouts/_generic.njk" %}
+
+{% from "govuk/components/generic-header/macro.njk" import govukGenericHeader %}
+
+{% set htmlClasses = ["app-template", htmlClasses] | join(" ") if htmlClasses else "app-template" %}
+
+{% block pageTitle %}GOV.UK Frontend{% endblock %}
+
+{# Replace default header with generic header and turn off footer component #}
+{% block govukHeader %}
+  {{ govukGenericHeader({
+    logoText: "GOV.UK Frontend review app"
+  }) }}
+{% endblock %}
+
+{% block govukFooter %}{% endblock %}
+
+{% block bodyEnd %}
+  {{ super() }}
+  {% block scripts %}
+    <script type="module" src="/javascripts/component-preview.bundle.min.mjs"></script>
+  {% endblock %}
+{% endblock %}

@@ -1,0 +1,62 @@
+{
+  "private": true,
+  "name": "@govuk-frontend/review",
+  "description": "GOV.UK Frontend review app",
+  "main": "src/start.mjs",
+  "engines": {
+    "node": "^24.11.0",
+    "npm": "^11.6.1 <11.6.3 || ^11.6.4"
+  },
+  "license": "MIT",
+  "scripts": {
+    "dev": "cross-env-shell REVIEW_APP_SILENT_START=true gulp dev --color",
+    "prebuild": "npm run clean",
+    "build": "gulp build --color",
+    "build:sassdoc": "sassdoc --config sassdoc.config.yaml ../govuk-frontend/src/govuk",
+    "build:types": "tsc --build tsconfig.json",
+    "postbuild": "npm run build:sassdoc",
+    "clean": "del-cli dist",
+    "proxy": "browser-sync start --config browsersync.config.js",
+    "serve": "nodemon",
+    "start": "node src/start.mjs",
+    "test:screenshots": "gulp screenshots --color"
+  },
+  "dependencies": {
+    "@govuk-frontend/config": "*",
+    "@govuk-frontend/lib": "*",
+    "@govuk-frontend/stats": "*",
+    "@prettier/sync": "^0.6.1",
+    "cookie-parser": "^1.4.7",
+    "express": "^5.2.1",
+    "express-validator": "^7.3.2",
+    "front-matter": "^4.0.2",
+    "govuk-frontend": "*",
+    "highlight.js": "^11.12.0",
+    "iframe-resizer": "^4.4.5",
+    "marked": "^18.0.11",
+    "marked-linkify-it": "^4.0.2",
+    "marked-smartypants": "^1.1.12",
+    "outdent": "^0.8.0",
+    "shuffle-seed": "^1.1.6",
+    "slug": "^9.1.0"
+  },
+  "devDependencies": {
+    "@govuk-frontend/helpers": "*",
+    "@govuk-frontend/tasks": "*",
+    "@percy/cli": "^1.32.7",
+    "@rollup/plugin-commonjs": "^29.0.3",
+    "@rollup/plugin-node-resolve": "^16.0.3",
+    "@rollup/plugin-terser": "^1.0.0",
+    "autoprefixer": "^10.5.4",
+    "browser-sync": "^3.0.4",
+    "gulp": "^5.0.1",
+    "gulp-cli": "^3.0.0",
+    "nodemon": "^3.1.14",
+    "nunjucks": "^3.2.4",
+    "postcss-pseudo-classes": "^0.4.0",
+    "puppeteer": "^24.42.0",
+    "rollup": "^4.63.1",
+    "sassdoc": "^2.7.4",
+    "supertest": "^7.2.2"
+  }
+}

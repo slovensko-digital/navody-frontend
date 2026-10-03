@@ -1,31 +1,34 @@
 {
-  "name": "webpack-boilerplate",
-  "description": "Webpack4 boilerplate consuming govuk-frontend",
+  "private": true,
+  "name": "@govuk-frontend/webpack-boilerplate",
+  "description": "Boilerplate example for govuk-frontend using webpack",
+  "engines": {
+    "node": "^24.11.0",
+    "npm": "^11.6.1 <11.6.3 || ^11.6.4"
+  },
   "scripts": {
-    "dev": "cross-env NODE_ENV=dev webpack-dev-server --progress --mode development --config webpack.config.js",
-    "build": "webpack -p --progress --mode production --config webpack.config.js"
+    "dev": "webpack serve --progress --mode development",
+    "prebuild": "npm run clean",
+    "build": "webpack --progress --mode production",
+    "clean": "del-cli dist"
   },
   "dependencies": {
     "govuk-frontend": "*"
   },
   "devDependencies": {
-    "babel-core": "^6.26.0",
-    "babel-loader": "^7.1.4",
-    "babel-preset-env": "^1.6.1",
-    "babel-preset-es3": "^1.0.1",
-    "clean-webpack-plugin": "0.1.19",
-    "cross-env": "5.1.4",
-    "css-loader": "0.28.11",
-    "file-loader": "1.1.11",
-    "html-webpack-plugin": "3.2.0",
-    "node-sass": "^4.7.2",
-    "sass-loader": "7.0.1",
-    "style-loader": "0.20.3",
-    "uglifyjs-webpack-plugin": "^1.2.4",
-    "url-loader": "1.0.1",
-    "webpack": "4.6.0",
-    "webpack-cli": "2.0.14",
-    "webpack-dev-server": ">=3.1.11",
-    "webpack-merge": "4.1.2"
+    "@babel/core": "^7.29.7",
+    "@babel/preset-env": "^7.29.7",
+    "autoprefixer": "^10.5.4",
+    "babel-loader": "^10.1.1",
+    "copy-webpack-plugin": "^14.0.0",
+    "css-loader": "^7.1.5",
+    "mini-css-extract-plugin": "^2.10.2",
+    "postcss-loader": "^8.2.1",
+    "sass-embedded": "^1.103.1",
+    "sass-loader": "^17.0.1",
+    "terser-webpack-plugin": "^5.3.16",
+    "webpack": "^5.110.2",
+    "webpack-cli": "^7.2.3",
+    "webpack-dev-server": "^6.0.0"
   }
 }

@@ -1,0 +1,9 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "include": ["./src/**/*.mjs"],
+  "exclude": ["**/*.test.*"],
+  "compilerOptions": {
+    "strictNullChecks": false,
+    "types": ["express", "node", "nunjucks", "slug", "typed-query-selector"]
+  }
+}

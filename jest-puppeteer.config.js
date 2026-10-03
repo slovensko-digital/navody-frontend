@@ -1,20 +1,47 @@
-const configPaths = require('./config/paths.json')
-const PORT = process.env.PORT || configPaths.ports.test
+const devServerOptions = require('./jest-dev-server.config.js')
 
+/**
+ * @type {import('jest-environment-puppeteer').JestPuppeteerConfig}
+ */
 module.exports = {
   browserContext: 'incognito',
+
+  /**
+   * Workaround for jest-environment-puppeteer 'uncaughtException'
+   * see error handling in '@govuk-frontend/helpers/jest/environment/puppeteer.mjs'
+   */
+  exitOnPageError: false,
+
+  /**
+   * Puppeteer launch options
+   */
   launch: {
-    // we use --no-sandbox --disable-setuid-sandbox as a workaround for the
-    // 'No usable sandbox! Update your kernel' error
-    // see more https://github.com/Googlechrome/puppeteer/issues/290
     args: [
-      '--no-sandbox',
-      '--disable-setuid-sandbox'
-    ]
+      /**
+       * Allow tests to use file:// paths
+       */
+      '--allow-file-access-from-files',
+
+      /**
+       * Prevent empty Chrome startup window
+       * Tests use their own `browser.newPage()` instead
+       */
+      '--no-startup-window'
+    ],
+
+    /**
+     * Allow headless mode switching using `HEADLESS=false`
+     *
+     * {@link https://developer.chrome.com/articles/new-headless/}
+     */
+    headless: process.env.HEADLESS !== 'false',
+
+    // See launch arg '--no-startup-window'
+    waitForInitialPage: false
   },
-  server: {
-    command: `cross-env PORT=${PORT} node app/start.js`,
-    launchTimeout: 30000, // Allow time for application to start
-    port: PORT
-  }
+
+  /**
+   * Development server options
+   */
+  server: devServerOptions
 }

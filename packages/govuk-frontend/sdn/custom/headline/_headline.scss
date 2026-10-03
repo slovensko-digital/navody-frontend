@@ -1,0 +1,44 @@
+@include govuk-exports("govuk/component/sdn-headline") {
+  $sdn-headline-background: #fafafa;
+  $sdn-headline-text-color: #333333;
+
+  .sdn-headline {
+    background: $sdn-headline-background;
+  }
+
+  .sdn-headline__container {
+    @include govuk-responsive-padding(5, "top");
+    color: $sdn-headline-text-color;
+
+    @include govuk-media-query($from: tablet) {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+
+  .sdn-headline__part {
+    @include govuk-responsive-padding(5, "bottom");
+    flex-shrink: 0;
+    max-width: 100%;
+
+    &--right {
+      @include govuk-media-query($from: tablet) {
+        margin: -7px 0;
+      }
+    }
+  }
+
+  .sdn-headline__headline {
+    @include govuk-font($size: 28);
+  }
+
+  .sdn-headline__subheadline {
+    @include govuk-font($size: 24);
+  }
+
+  .sdn-headline__button {
+    margin-bottom: 0;
+  }
+}

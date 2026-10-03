@@ -4,43 +4,68 @@
 
 JavaScript files have the same name as the component's folder name. Test files have a `.test` suffix placed before the file extension.
 
-```
-checkboxes
-├── checkboxes.js
-└── checkboxes.test.js
+```console
+component
+├── component.mjs
+└── component.test.js
 ```
 
 ## Skeleton
 
-```js
-import { nodeListForEach } from '../vendor/common'
+```mjs
+import { GOVUKFrontendComponent } from '../../govuk-frontend-component.mjs'
 
-function Checkboxes ($module) {
-  // code goes here
+/**
+ * Component name
+ *
+ * @preserve
+ */
+export class Example extends GOVUKFrontendComponent {
+  /**
+   * @param {Element | null} $root - HTML element to use for component
+   */
+  constructor($root){
+    super($root)
+
+    // Code goes here
+    this.$root.addEventListener('click', () => {
+      // ...
+    })
+  }
 }
+```
 
-Checkboxes.prototype.init = function () {
-  // code goes here
-}
+## Use data attributes to initialise component JavaScript
 
-export default Checkboxes
+Use `data-module` attributes in HTML to initialise a component in JavaScript. For example:
+
+```html
+data-module="govuk-accordion"
+```
+
+## Use classes to target DOM elements
+
+After you initialise a component, use `govuk-js-*` classes to target DOM elements. For example:
+
+```html
+class="govuk-js-header-toggle"
 ```
 
 ## Comments
 
 Use `/** ... */` for multi-line comments. Include a description, and specify types and values for all parameters and return values.
 
-```js
+```mjs
 /**
-* Get the nearest ancestor element of a node that matches a given tag name
-* @param {object} node element
-* @param {string} match tag name (e.g. div)
-* @return {object} ancestor element
-*/
-
-function (node, match) {
-  // code goes here
-  return ancestor
+ * Get the first descendent (child) of an HTML element that matches a given tag name
+ *
+ * @param {Element} $element - HTML element
+ * @param {string} tagName - Tag name (for example 'div')
+ * @returns {Element} Ancestor element
+ */
+function exampleHelper($element, tagName) {
+  // Code goes here
+  return $element.querySelector(tagName)
 }
 ```
 
@@ -50,76 +75,130 @@ Use `// FIXME:` to annotate problems.
 
 Use `// TODO:` to annotate solutions to problems.
 
-## Constructors and methods
+## Classes and methods
 
-Use the prototype design pattern to structure your code.
+Use the class design pattern to structure your code.
 
-Create a constructor and define any variables that the object needs.
+Create a class and define the methods you need.
 
-```js
-function Checkboxes ($module) {
-  // code goes here
+```mjs
+class Example {
+  // Code goes here
 }
 ```
 
-Assign methods to the prototype object. Do not overwrite the prototype with a new object as this makes inheritance impossible.
+Add methods to the class.
 
-```js
-// bad
-Checkboxes.prototype = {
-  init: function () {
-    // code goes here
+```mjs
+// Good
+class Example {
+  doSomething() {
+    // Code goes here
   }
 }
 
-// good
-Checkboxes.prototype.init = function () {
-  // code goes here
+// Bad
+Example.prototype = {
+  doSomething: function () {
+    // Code goes here
+  }
 }
 ```
 
-When initialising an object, use the `new` keyword.
+When initialising a class, use the `new` keyword.
 
-```js
-// bad
-var myCheckbox = Checkbox().init()
+```mjs
+// Bad
+const myExample1 = Example()
 
-// good
-var myCheckbox = new Checkbox().init()
+// Good
+const myExample2 = new Example()
 ```
 
 ## Modules
 
-Use ES6 modules (`import`/`export`) over a non-standard module system. You can always transpile to your preferred module system.
+Use ECMAScript (ES) modules (`import`/`export`) over CommonJS and other formats. You can always transpile to your preferred module system.
 
-```js
-import { nodeListForEach } from '../vendor/common'
-// code goes here
-export default Checkboxes
+```mjs
+import { closestAttributeValue } from '../common/index.mjs'
+
+// Code goes here
+export function exampleHelper1() {}
+export function exampleHelper2() {}
 ```
 
-Avoid using wildcard (`import * as nodeListForEach`) imports.
+You must specify the file extension when using the import keyword.
 
-Use default export over named export.
+Avoid using namespace imports (`import * as namespace`) in code bundled for CommonJS and other formats as this can prevent "tree shaking" optimisations.
+
+Prefer named exports over default exports to avoid compatibility issues with transpiler "synthetic default" as discussed in: https://github.com/alphagov/govuk-frontend/issues/2829
+
+## Throwing errors
+
+### Error types
+
+First, check if one of the [native errors provides](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Error#error_types) the right semantic for the error you're looking to throw, if so, use this class.
+
+If none of the native errors have the right semantics, create a new class for this error. This class should:
+
+- have a name ending in `Error` to match the native conventions
+- extend `GOVUKFrontendError`, so users can separate our custom errors from native ones using `instanceof`
+- have a `name` property set to its class name, as extending classes doesn't set this automatically and grabbing the constructor's name risks being affected by mangling during minification
+
+```js
+class CustomError extends GOVUKFrontendError {
+  name = 'CustomError'
+}
+```
+
+### Error message
+
+Keep the message to the point, but provide the users the information they need to identify the cause of the error.
+
+If the message is the same whatever the situation, you may use the constructor of our custom error to centralise that message, rather than passing it each time an error is thrown.
+
+```js
+class SupportError extends GOVUKFrontendError {
+  name = 'SupportError'
+
+  constructor () {
+    super('GOV.UK Frontend is not supported in this browser')
+  }
+}
+```
 
 ## Polyfilling
-
-If you need to support older browsers, import the necessary [polyfills](/src/govuk/vendor/polyfills) and they will be added to the environment when the feature is not supported.
-
-For example, if you want to polyfill `addEventListener` for IE8, import the Event polyfills.
-
-```js
-import '../vendor/polyfills/Event'
-```
 
 If you need polyfills for features that are not yet included in this project, please see the following guide on [how to add polyfills](../polyfilling.md).
 
 ## Formatting and linting
 
-GOV.UK Frontend uses [standardjs](http://standardjs.com/), an opinionated JavaScript linter. All JavaScript files follow its conventions, and it runs on CI to ensure that new pull requests are in line with them.
+GOV.UK Frontend uses [ESLint](https://eslint.org) with [JavaScript Standard Style](https://standardjs.com), an opinionated JavaScript style guide. All JavaScript files follow its conventions, and it runs on GitHub Actions to ensure that new pull requests are in line with them.
 
-The standard docs have a [complete list of rules and some reasoning behind them](http://standardjs.com/rules.html).
+For consistent formatting we run [Prettier](https://prettier.io).
 
-Read more about [running standard manually or in your editor](https://github.com/alphagov/styleguides/blob/master/js.md#linting).
+The standard docs have a [complete list of rules and some reasoning behind them](https://standardjs.com/rules.html).
+
+Read more about [running standard manually, or in your editor, on the 'JavaScript coding style' page of the GDS Way](https://gds-way.digital.cabinet-office.gov.uk/manuals/programming-languages/js.html#linting).
 
 See also [testing and linting](/docs/releasing/testing-and-linting.md).
+
+## Running the lint task
+
+You can run the linter with `npm run lint:js`, or use linting in [Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) and [other editors that support ESLint](https://eslint.org/docs/latest/use/integrations#editors).
+
+To automatically fix ESLint issues, add the `--fix` flag:
+
+```shell
+npm run lint:js -- --fix
+```
+
+## Running the formatting task
+
+You can run the formatter with `npm run lint:prettier`, or use formatting in [Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) and [other editors that support Prettier](https://prettier.io/docs/en/editors.html)
+
+To automatically fix Prettier issues in all supported files, add the `--write` flag:
+
+```shell
+npm run lint:prettier -- --write
+```

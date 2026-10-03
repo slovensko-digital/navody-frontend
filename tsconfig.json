@@ -1,0 +1,24 @@
+{
+  "extends": "./tsconfig.base.json",
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.dev.json"
+    },
+    {
+      "path": "./bin/tsconfig.json"
+    },
+    {
+      "path": "./packages/govuk-frontend-review/tsconfig.json"
+    },
+    {
+      "path": "./packages/govuk-frontend/tsconfig.json"
+    },
+    {
+      "path": "./shared/tsconfig.json"
+    },
+    {
+      "path": "./tests/tsconfig.json"
+    }
+  ]
+}

@@ -1,0 +1,78 @@
+@mixin tile-borders {
+  $border-color: #ededed;
+
+  border-style: solid;
+  border-color: $border-color;
+}
+
+@include govuk-exports("govuk/component/sdn-tiles") {
+  $text-color: #000000;
+  $text-color-hover: #3e3e3e;
+
+  .sdn-tiles {
+    @include tile-borders;
+    display: flex;
+    flex-wrap: wrap;
+    border-width: 2px 0 0 2px;
+  }
+
+  .sdn-tiles__item {
+    @include tile-borders;
+    box-sizing: border-box;
+    width: 50%;
+    border-width: 0 2px 2px 0;
+    color: $text-color;
+    text-decoration: none;
+    cursor: pointer;
+
+    &:link,
+    &:visited {
+      color: $text-color;
+    }
+
+    &:hover {
+      opacity: 0.9;
+      color: $text-color-hover;
+      background-color: govuk-colour("white");
+      text-decoration: underline;
+    }
+
+    @include govuk-media-query($from: tablet) {
+      width: 33%;
+    }
+
+    @include govuk-media-query($from: desktop) {
+      width: 25%;
+    }
+  }
+
+  .sdn-tile {
+    display: flex;
+    flex-direction: column;
+    padding: 16px;
+  }
+
+  .sdn-tile__image {
+    height: 150px;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .sdn-tile__content {
+    margin-top: 35px;
+    margin-bottom: 15px;
+  }
+
+  .sdn-tile-content-text-block {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+  }
+
+  .sdn-tile-content-text-block__item {
+    @include govuk-font($size: 24, $line-height: 1.5);
+    font-weight: bold;
+    text-align: center;
+  }
+}

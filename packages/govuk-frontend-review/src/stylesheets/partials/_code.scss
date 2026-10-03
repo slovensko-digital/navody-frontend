@@ -1,0 +1,25 @@
+@use "pkg:govuk-frontend/base" as *;
+
+@use "highlight";
+
+.app-code {
+  @include govuk-responsive-margin(6, "bottom");
+}
+
+.app-code__container {
+  display: block;
+  margin: 0;
+  padding: govuk-spacing(4);
+  overflow-x: auto;
+  border: $govuk-focus-width solid transparent;
+  outline: 1px solid transparent;
+  background-color: govuk-colour("black", $variant: "tint-95");
+  @include govuk-responsive-margin(4, "bottom");
+
+  &:focus {
+    border: $govuk-focus-width solid;
+    border-color: govuk-functional-colour(input-border);
+    outline: $govuk-focus-width solid;
+    outline-color: govuk-functional-colour(focus);
+  }
+}

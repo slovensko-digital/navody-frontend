@@ -1,0 +1,8 @@
+// SDN colours on top of GOV.UK functional colours. Hover and active link
+// colours stay GOV.UK, the original SDN hover (#2b8cc4) fails WCAG AA.
+$govuk-functional-colours: (
+  "brand": #3a67e8,
+  "text": #06070b,
+  "link": #3a67e8,
+  "link-visited": #382892
+) !default;

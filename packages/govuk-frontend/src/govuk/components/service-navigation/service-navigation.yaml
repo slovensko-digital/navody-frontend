@@ -1,0 +1,491 @@
+params:
+  - name: classes
+    type: string
+    required: false
+    description: Classes to add to the service navigation container.
+  - name: attributes
+    type: object
+    required: false
+    description: HTML attributes (for example, data attributes) to add to the service navigation container.
+  - name: ariaLabel
+    type: string
+    required: false
+    description: The text for the `aria-label` which labels the service navigation container when a service name is included. Defaults to `"Service information"`.
+  - name: menuButtonText
+    type: string
+    required: false
+    description: The text of the mobile navigation menu toggle.
+  - name: menuButtonLabel
+    type: string
+    required: false
+    description: The screen reader label for the mobile navigation menu toggle. Defaults to the same value as `menuButtonText` if not specified.
+  - name: navigationLabel
+    type: string
+    required: false
+    description: The screen reader label for the mobile navigation menu. Defaults to the same value as `menuButtonText` if not specified.
+  - name: navigationId
+    type: string
+    required: false
+    description: The ID used to associate the mobile navigation toggle with the navigation menu. Defaults to `navigation`.
+  - name: navigationClasses
+    type: string
+    required: false
+    description: Classes to add to the navigation menu container.
+  - name: collapseNavigationOnMobile
+    type: boolean
+    required: false
+    description: Whether the navigation should be collapsed inside a menu on mobile. Defaults to true if there is more than one navigation item.
+  - name: serviceName
+    type: string
+    required: false
+    description: The name of your service.
+  - name: serviceUrl
+    type: string
+    required: false
+    description: The homepage of your service.
+  - name: navigation
+    type: array
+    required: true
+    description: Used to add navigation to the service header.
+    params:
+      - name: current
+        type: boolean
+        required: false
+        description: If `true`, indicates that the user is currently on this page. This takes precedence over `active`.
+      - name: active
+        type: boolean
+        required: false
+        description: If `true`, indicates that the user is within this group of pages in the navigation hierarchy.
+      - name: html
+        type: string
+        required: true
+        description: HTML for the navigation item. If `html` is provided, the `text` option will be ignored.
+      - name: text
+        type: string
+        required: true
+        description: Text for the navigation item. If `html` is provided, the `text` option will be ignored.
+      - name: href
+        type: string
+        required: false
+        description: URL of the navigation item anchor.
+      - name: attributes
+        type: object
+        required: false
+        description: HTML attributes (for example data attributes) to add to the navigation item anchor.
+  - name: slots
+    type: object
+    required: false
+    description: Specified points for injecting custom HTML into the service header.
+    params:
+      - name: start
+        type: string
+        required: false
+        description: HTML injected at the start of the service header container.
+      - name: end
+        type: string
+        required: false
+        description: HTML injected at the end of the service header container.
+      - name: end
+        type: object
+        required: false
+        description: Options for injecting HTML at the end of the service header container.
+        params:
+          - name: html
+            type: string
+            required: false
+            description: HTML injected at the end of the service header container.
+          - name: align
+            type: string
+            required: false
+            description: By default, the `end` slot renders below the navigation items. Use `inline` to render it on the same line as the navigation items when space is available.
+      - name: navigationStart
+        type: string
+        required: false
+        description: HTML injected before the first list item in the navigation list. Requires `navigation` to be set.
+      - name: navigationEnd
+        type: string
+        required: false
+        description: HTML injected after the last list item in the navigation list. Requires `navigation` to be set.
+
+previewLayout: full-width
+
+examples:
+  - name: default
+    screenshot:
+      variants:
+        - default
+        - no-js
+    options:
+      navigation:
+        - href: '#/1'
+          text: Navigation item 1
+        - href: '#/2'
+          text: Navigation item 2
+        - href: '#/3'
+          text: Navigation item 3
+        - href: '#/4'
+          text: Navigation item 4
+  - name: with navigation with a current item
+    description: The current item indicates that the user is present on that exact page. It looks the same as an active item, but marks this item as the one the user is currently viewing in ARIA.
+    options:
+      navigation:
+        - href: '#/1'
+          text: Navigation item 1
+        - href: '#/2'
+          text: Navigation item 2
+          current: true
+        - href: '#/3'
+          text: Navigation item 3
+        - href: '#/4'
+          text: Navigation item 4
+  - name: with large navigation
+    options:
+      navigation:
+        - href: '#/browse/benefits'
+          text: Benefits
+        - href: '#/browse/births-deaths-marriages'
+          text: Births, deaths, marriages and care
+        - href: '#/browse/business'
+          text: Business and self-employed
+        - href: '#/browse/childcare-parenting'
+          text: Childcare and parenting
+        - href: '#/browse/citizenship'
+          text: Citizenship and living in the UK
+        - href: '#/browse/justice'
+          text: Crime, justice and the law
+        - href: '#/browse/disabilities'
+          text: Disabled people
+        - href: '#/browse/driving'
+          text: Driving and transport
+        - href: '#/browse/education'
+          text: Education and learning
+        - href: '#/browse/employing-people'
+          text: Employing people
+        - href: '#/browse/environment-countryside'
+          text: Environment and countryside
+        - href: '#/browse/housing-local-services'
+          text: Housing and local services
+        - href: '#/browse/tax'
+          text: Money and tax
+        - href: '#/browse/abroad'
+          text: Passports, travel and living abroad
+        - href: '#/browse/visas-immigration'
+          text: Visas and immigration
+        - href: '#/browse/working'
+          text: Working, jobs and pensions
+  - name: with HTML navigation items
+    options:
+      navigation:
+        - href: '#/1'
+          html: <em>Navigation item 1</em>
+        - href: '#/2'
+          html: <em>Navigation item 2</em>
+        - href: '#/3'
+          html: <em>Navigation item 3</em>
+  - name: with non-link navigation items
+    options:
+      navigation:
+        - text: Navigation item 1
+        - html: <em>Navigation item 2</em>
+        - text: Navigation item 3
+  - name: with service name
+    options:
+      serviceName: Service name
+  - name: with service link
+    options:
+      serviceName: Service name
+      serviceUrl: '#/'
+  - name: with long service name
+    options:
+      serviceName: Apply to receive a rare holofoil Charizard Pokémon card from the King
+      serviceUrl: '#/'
+  - name: with service name and navigation
+    screenshot:
+      variants:
+        - default
+        - no-js
+    options:
+      serviceName: Apply for a juggling license
+      serviceUrl: '#/'
+      navigation:
+        - href: '#/1'
+          text: Navigation item 1
+        - href: '#/2'
+          text: Navigation item 2
+          active: true
+        - href: '#/3'
+          text: Navigation item 3
+        - href: '#/4'
+          text: Navigation item 4
+  - name: inverse
+    description: Service navigation that appears sandwiched between other areas of brand blue, such as the GOV.UK header and a custom page masthead.
+    pageTemplateOptions:
+      bodyClasses: app-template__body--inverse
+    options:
+      classes: govuk-service-navigation--inverse
+      serviceName: Apply for a juggling license
+      serviceUrl: '#/'
+      navigation:
+        - href: '#/1'
+          text: Navigation item 1
+        - href: '#/2'
+          text: Navigation item 2
+          active: true
+        - href: '#/3'
+          text: Navigation item 3
+        - href: '#/4'
+          text: Navigation item 4
+  - name: with collapseNavigationOnMobile set to false
+    options:
+      serviceName: Apply for a juggling license
+      serviceUrl: '#/'
+      navigation:
+        - href: '#/1'
+          text: Navigation item 1
+        - href: '#/2'
+          text: Navigation item 2
+          active: true
+        - href: '#/3'
+          text: Navigation item 3
+        - href: '#/4'
+          text: Navigation item 4
+      collapseNavigationOnMobile: false
+  - name: with a single navigation item
+    options:
+      serviceName: Apply for a juggling license
+      serviceUrl: '#/'
+      navigation:
+        - href: '#/1'
+          text: Log out
+  - name: with a single navigation item and collapseNavigationOnMobile set to true
+    options:
+      serviceName: Apply for a juggling license
+      serviceUrl: '#/'
+      navigation:
+        - href: '#/1'
+          text: Log out
+      collapseNavigationOnMobile: true
+
+  # Hidden examples
+  - name: with no options set
+    description: If no serviceName or navigation is set, don't render anything.
+    hidden: true
+    options: {}
+  - name: attributes
+    hidden: true
+    options:
+      serviceName: Service name
+      attributes:
+        'data-foo': bar
+        'data-pika': chu
+  - name: classes
+    hidden: true
+    options:
+      serviceName: Service name
+      classes: app-my-curious-custom-class
+  - name: with custom aria-label
+    hidden: true
+    options:
+      serviceName: Service name
+      ariaLabel: Service name and nav
+  - name: with custom navigation toggle text
+    hidden: true
+    options:
+      menuButtonText: Enter the NavZone
+      navigation:
+        - href: '#/1'
+          text: Navigation item 1
+        - href: '#/2'
+          text: Navigation item 2
+  - name: with custom navigation toggle label
+    hidden: true
+    options:
+      menuButtonLabel: Enter the NavZone
+      navigation:
+        - href: '#/1'
+          text: Navigation item 1
+        - href: '#/2'
+          text: Navigation item 2
+  - name: with identical navigation toggle text and label
+    hidden: true
+    options:
+      menuButtonText: Enter the NavZone
+      menuButtonLabel: Enter the NavZone
+      navigation:
+        - href: '#/1'
+          text: Navigation item 1
+        - href: '#/2'
+          text: Navigation item 2
+  - name: with custom navigation label
+    hidden: true
+    options:
+      navigationLabel: Main navigation
+      navigation:
+        - href: '#/1'
+          text: Navigation item 1
+        - href: '#/2'
+          text: Navigation item 2
+  - name: with custom navigation toggle text and navigation label
+    hidden: true
+    options:
+      menuButtonText: Enter the NavZone
+      navigationLabel: The NavZone
+      navigation:
+        - href: '#/1'
+          text: Navigation item 1
+        - href: '#/2'
+          text: Navigation item 2
+  - name: with custom navigation classes
+    hidden: true
+    options:
+      navigationClasses: app-my-neat-navigation-class
+      navigation:
+        - href: '#/1'
+          text: Navigation item 1
+        - href: '#/2'
+          text: Navigation item 2
+  - name: with custom navigation ID
+    hidden: true
+    options:
+      navigationId: main-nav
+      navigation:
+        - href: '#/1'
+          text: Navigation item 1
+        - href: '#/2'
+          text: Navigation item 2
+  - name: with navigation having empty values
+    hidden: true
+    options:
+      navigation:
+        - href: '#/1'
+          text: Navigation item 1
+        - null
+        - false
+        - ''
+        -
+        - href: '#/2'
+          text: Navigation item 2
+  - name: with navigation having only empty values
+    hidden: true
+    options:
+      navigation:
+        - null
+        - false
+        -
+        - ''
+  - name: with navigation being an empty array
+    hidden: true
+    options:
+      navigation: []
+  - name: with navigation with an active item
+    hidden: true
+    description: The active item indicates that the user is within that section, but not on the exact page being linked. It looks the same as a current item, but marks this item as an ancestor to the one the user is viewing in ARIA (e.g. a parent section).
+    options:
+      navigation:
+        - href: '#/1'
+          text: Navigation item 1
+        - href: '#/2'
+          text: Navigation item 2
+          active: true
+        - href: '#/3'
+          text: Navigation item 3
+        - href: '#/4'
+          text: Navigation item 4
+  - name: with language navigation
+    description: HTML rendered by the language navigation component can be injected into the `end` slot of the service header.
+    options:
+      serviceName: Service name
+      navigation:
+        - href: '#/1'
+          text: Navigation item 1
+          active: true
+        - href: '#/2'
+          text: Navigation item 2
+        - href: '#/3'
+          text: Navigation item 3
+      slots:
+        end: |-
+          <nav class="govuk-language-navigation" aria-label="Language navigation">
+            <ul class="govuk-language-navigation__list">
+              <li class="govuk-language-navigation__list-item">
+                <span class="govuk-language-navigation__text" lang="en" aria-current="true">English</span>
+              </li>
+              <li class="govuk-language-navigation__list-item">
+                <a class="govuk-language-navigation__link" href="#/cy" lang="cy" hreflang="cy" rel="alternate">Cymraeg</a>
+              </li>
+            </ul>
+          </nav>
+  - name: with right-aligned language navigation
+    description: HTML rendered by the language navigation component can be injected into the `end` slot of the service header.
+    options:
+      serviceName: Service name
+      navigation:
+        - href: '#/1'
+          text: Navigation item 1
+          active: true
+        - href: '#/2'
+          text: Navigation item 2
+        - href: '#/3'
+          text: Navigation item 3
+      slots:
+        end:
+          align: inline
+          html: |-
+            <nav class="govuk-language-navigation" aria-label="Language navigation">
+              <ul class="govuk-language-navigation__list">
+                <li class="govuk-language-navigation__list-item">
+                  <span class="govuk-language-navigation__text" lang="en" aria-current="true">English</span>
+                </li>
+                <li class="govuk-language-navigation__list-item">
+                  <a class="govuk-language-navigation__link" href="#/cy" lang="cy" hreflang="cy" rel="alternate">Cymraeg</a>
+                </li>
+              </ul>
+            </nav>
+  - name: inverse with language navigation
+    description: Service navigation that appears sandwiched between other areas of brand blue, such as the GOV.UK header and a custom page masthead.
+    pageTemplateOptions:
+      bodyClasses: app-template__body--inverse
+    options:
+      classes: govuk-service-navigation--inverse
+      serviceName: Apply for a juggling license
+      serviceUrl: '#/'
+      navigation:
+        - href: '#/1'
+          text: Navigation item 1
+        - href: '#/2'
+          text: Navigation item 2
+          active: true
+        - href: '#/3'
+          text: Navigation item 3
+        - href: '#/4'
+          text: Navigation item 4
+      slots:
+        end: |-
+          <nav class="govuk-language-navigation govuk-language-navigation--inverse" aria-label="Language navigation">
+            <ul class="govuk-language-navigation__list">
+              <li class="govuk-language-navigation__list-item">
+                <span class="govuk-language-navigation__text" lang="en" aria-current="true">English</span>
+              </li>
+              <li class="govuk-language-navigation__list-item">
+                <a class="govuk-language-navigation__link" href="#/cy" lang="cy" hreflang="cy" rel="alternate">Cymraeg</a>
+              </li>
+            </ul>
+          </nav>
+  - name: with slotted content
+    hidden: true
+    options:
+      slots:
+        start: '<div>[start]</div>'
+        end: '<div>[end]</div>'
+        navigationStart: '<li>[navigation start]</li>'
+        navigationEnd: '<li>[navigation end]</li>'
+  - name: with `inline` end slot
+    options:
+      serviceName: Service name
+      navigation:
+        - href: '#/1'
+          text: Navigation item 1
+      slots:
+        end:
+          html: '<div>[end]</div>'
+          align: 'inline'

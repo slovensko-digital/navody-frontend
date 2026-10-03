@@ -1,0 +1,24 @@
+{
+  "private": true,
+  "name": "@govuk-frontend/lib",
+  "description": "GOV.UK Frontend shared library",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./*": "./*.js"
+  },
+  "engines": {
+    "node": "^24.11.0",
+    "npm": "^11.6.1 <11.6.3 || ^11.6.4"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@govuk-frontend/config": "*",
+    "filesize": "^11.0.22",
+    "glob": "^13.0.6",
+    "js-yaml": "^5.4.1",
+    "minimatch": "^10.2.5",
+    "nunjucks": "^3.2.4",
+    "outdent": "^0.8.0"
+  }
+}

@@ -1,82 +1,120 @@
-# NPM and Gulp tasks
+# npm and Gulp tasks
 
-This document describes the NPM scripts that run the application, and the gulp tasks they trigger to build files, update the package, copy assets and watch for changes.
+This document describes the npm scripts that run the Express.js review app, and the Gulp tasks they trigger to build files, update the package, copy assets and watch for changes.
 
-To run the application without any tasks being triggered, see [Express app only](#express-app-only).
+To run the Express.js review app without any tasks being triggered, see [Review app only](#review-app-only).
 
-## NPM script aliases
+## npm script aliases
 
-NPM scripts are defined in `package.json`. These trigger a number of gulp tasks.
+npm scripts are defined in `package.json`. These trigger a number of Gulp tasks.
 
-**`npm run start` will trigger `gulp dev` that:**
-- cleans the `public` folder
-- compiles component nunjucks files to `public`
-- copies icons to `public`
-- compile sass files, add vendor prefixes and copy to `public`
-- starts up the Express server and app
-- starts up `gulp watch` task to watch for changes
+**`npm start` will trigger `npm run dev` that will:**
 
-**`npm run test` will do the following:**
-- compile components to HTML
-- run JS tests
-- run CSS lint checker
-- run accessibility tests on HTML files
-- run tests on the review application
+- runs `npm run build`
+- starts the review app, restarting when `.mjs`, `.json` or `.yaml` files change
+- compile again when frontend `.mjs` and `.scss` files change
+- lint the JavaScript and Sass files of the project when they change
 
-**`npm run heroku` runs on Heroku build/PR and it:**
-- compiles components' HTML
-- compiles CSS & JS
-- starts up Express
+  The linting can be disabled using the `GOVUK_DS_FRONTEND_NO_LINTING` environment variable.
+  It accepts a comma separated list of values with the types of linting you want to disable (`scss` and/or `js`).
+  For example:
+
+  ```sh
+  GOVUK_DS_FRONTEND_NO_LINTING=scss,js npm start
+  ```
+
+**`npm test` will do the following:**
+
+- run Nunjucks macros tests
+- run JavaScript tests on the review app
+- run accessibility and HTML validation tests
+
+**`npm run build` will do the following:**
+
+- run tasks from `npm run build:package`
+- run tasks from `npm run build:app`
+
+**`npm run clean` will do the following:**
+
+- clean the `./dist` folder from all workspaces
+
+**`npm run build:app` will trigger `npm run build --workspace @govuk-frontend/review` that will:**
+
+- clean the `./packages/govuk-frontend-review/dist` folder
+- output files into `./packages/govuk-frontend-review/dist`
+- copy fonts and images
+- compile JavaScript and Sass, including documentation
 
 **`npm run build:package` will do the following:**
-- compile component nunjucks to HTML
-- copy template, macro and component.njk files for each component
-- copy Sass files, add vendor prefixes and replace path to be node_modules consumption compliant
-- runs `npm run test:build:package` (which will test the output is correct)
 
-**`npm run build:dist` will do the following:**
-- copy JS
-- copy icons
-- copy SASS and add vendor prefixes
-- compile component nujucks files to HTML
-- take version from 'all/package.json' and append it to compiled & minified JS and CSS files
-- runs `npm run test:dist:package` (which will test the output is correct)
+- clean the `./packages/govuk-frontend/dist` folder
+- output files into `./packages/govuk-frontend/dist`
+- copy Sass files, applying Autoprefixer via PostCSS
+- copy Nunjucks component template/macro files, including JSON configs
+- copy GOV.UK Prototype Kit config files
+- compile Sass to CSS
+- compile JavaScript to ECMAScript (ES) modules
+- compile JavaScript to Universal Module Definition (UMD) bundles
+- compile Rollup build stats into `./shared/stats/dist`
+- runs `npm run postbuild:package` (which will test the output is correct)
+
+**`npm run build:release` will do the following:**
+
+- clean the `./dist` folder
+- output files into `./dist`
+- copy fonts and images
+- compile JavaScript and Sass
+- append version number from `packages/govuk-frontend/package.json` to compiled JavaScript and CSS files
+- runs `npm run postbuild:release` (which will test the output is correct)
+
+**`npm run build:types` will do the following:**
+
+- run the [TypeScript compiler](https://www.typescriptlang.org/docs/handbook/compiler-options.html) to build type declarations for the GOV.UK Frontend package
+
+To verify the types in all our JavaScript files, run `npm run lint:types`
 
 ## Gulp tasks
 
-Gulp tasks are defined in `gulpfile.js` and .`/tasks/gulp/` folder.
+Project Gulp tasks are defined in [`gulpfile.mjs`](/gulpfile.mjs) and the [`tasks/`](/shared/tasks) folder.
 
-**`gulp default` or just `gulp`**
+Gulp tasks from npm workspaces (such as the review app) can be run as shown:
+
+**`npx --workspace @govuk-frontend/review -- gulp --tasks`**
+
+This will list out all available tasks for the review app.
+
+GOV.UK Frontend package build Gulp tasks are defined in [`packages/govuk-frontend/gulpfile.mjs`](/packages/govuk-frontend/gulpfile.mjs) and the [`packages/govuk-frontend/tasks/`](/packages/govuk-frontend/tasks) folder.
+
+**`npx --workspace govuk-frontend -- gulp --tasks`**
+
+This will list out all available tasks for the GOV.UK Frontend package.
+
+Review app Gulp tasks are defined in [`packages/govuk-frontend-review/gulpfile.mjs`](/packages/govuk-frontend-review/gulpfile.mjs) and the [`packages/govuk-frontend-review/tasks/`](/packages/govuk-frontend-review/tasks) folder.
+
+**`npx --workspace @govuk-frontend/review -- gulp scripts`**
 
 This task will:
-- list out all available tasks
 
-**`gulp test`**
+- check JavaScript code quality via ESLint (`npm run lint:js`) (using JavaScript Standard Style)
+- bundle JavaScript using Rollup into `./packages/govuk-frontend-review/dist/javascripts`
 
-This task will:
-- Run scss:lint
-
-**`gulp watch`**
+**`npx --workspace @govuk-frontend/review -- gulp styles`**
 
 This task will:
-- watch for changes in .js, .scss and .njk files and run below tasks.
 
-**`gulp styles`**
+- check Sass code quality via Stylelint (`npm run lint:scss`)
+- compile Sass to CSS into `./packages/govuk-frontend-review/dist/stylesheets`
 
-This task will:
- - run scss lint task (`gulp scss:lint`)
- - sass compilation (`gulp scss:compile`) to a destination folder that can be specified via a --destination flag
+## Review app only
 
-**`gulp scripts`**
+After building the project with `npm run build` the Express.js review app can be started with `npm start --workspace @govuk-frontend/review`. This prevents the Gulp tasks triggered by `npm start` from running.
 
- This task will:
- - concatenate and uglify javascript (`gulp js:compile`) to a destination folder that can be specified via a --destination flag
+## Bundler integration
 
-**`gulp compile:components`**
+After building the project with `npm run build`, you can verify that the `govuk-frontend` package will be consumed correctly by mainstream bundlers with `npm run <BUNDLER_NAME> --workspace @govuk-frontend/bundler-integrations` (where bundler name is one of `rollup`, `webpack` or `vite`).
 
-  This task will:
-  - compile all `src/govuk/components/componentName/componentName.njk` files to HTML files
+This will use the specified bundler to compile both `tests/bundler-integrations/src/default.mjs` which is only importing one component, and `tests/bundler-integrations/src/initAll.mjs` which is importing and initialising all components via `initAll`. This helps us verify that [tree shaking] works as intended. The build output for both files is `tests/bundler-integrations/dist/<BUNDLER_NAME>/[name].js`. `default.js` should not contain the code of other components whilst `initAll.js` should contain the code for all the components.
 
-## Express app only
+You can also run `npm run build:all --workspace @govuk-frontend/bundler-integrations` to run all three bundlers in one go.
 
-To simply run the Express app without gulp tasks being triggered, simply run `node app/start.js`.
+[tree shaking]: https://developer.mozilla.org/en-US/docs/Glossary/Tree_shaking

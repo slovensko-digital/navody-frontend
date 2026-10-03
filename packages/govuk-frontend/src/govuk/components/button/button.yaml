@@ -1,0 +1,260 @@
+params:
+  - name: text
+    type: string
+    required: true
+    description: If `html` is set, this is not required. Text for the button. If `html` is provided, the `text` option will be ignored.
+  - name: html
+    type: string
+    required: true
+    description: If `text` is set, this is not required. HTML for the button. If `html` is provided, the `text` option will be ignored.
+  - name: type
+    type: string
+    required: false
+    description: Type of the button, determining its behaviour in forms – `"button"`, `"submit"` or `"reset"`. Defaults to `"submit"`. This has no effect if `href` is set.
+  - name: name
+    type: string
+    required: false
+    description: Name of the button, sent when a form is submitted. This has no effect if `href` is set.
+  - name: value
+    type: string
+    required: false
+    description: Value of the button, sent when a form is submitted. This has no effect if `href` is set.
+  - name: disabled
+    type: boolean
+    required: false
+    description: Whether the button should be disabled. `disabled` and `aria-disabled` attributes will be set automatically. This has no effect if `href` is set.
+  - name: href
+    type: string
+    required: false
+    description: The URL that the button should link to.
+  - name: classes
+    type: string
+    required: false
+    description: Classes to add to the button.
+  - name: attributes
+    type: object
+    required: false
+    description: HTML attributes (for example data attributes) to add to the button.
+  - name: preventDoubleClick
+    type: boolean
+    required: false
+    description: Prevent accidental double clicks on submit buttons from submitting forms multiple times. This has no effect if `href` is set.
+  - name: isStartButton
+    type: boolean
+    required: false
+    description: Use for the main call to action on your service's start page.
+  - name: id
+    type: string
+    required: false
+    description: The ID of the button.
+
+examples:
+  - name: default
+    screenshot: true
+    options:
+      text: Save and continue
+  - name: default hover state
+    options:
+      text: Save and continue
+      classes: :hover
+  - name: default active state
+    options:
+      text: Save and continue
+      classes: :active
+  - name: default focus state
+    options:
+      text: Save and continue
+      classes: :focus
+  - name: disabled
+    options:
+      text: Disabled button
+      disabled: true
+  - name: link
+    options:
+      text: Link button
+      href: '/'
+  - name: start
+    screenshot: true
+    options:
+      text: Start now button
+      isStartButton: true
+  - name: secondary
+    description: A button for secondary actions
+    options:
+      name: secondary
+      text: Secondary button
+      classes: govuk-button--secondary
+  - name: secondary hover state
+    options:
+      name: secondary
+      text: Secondary button
+      classes: govuk-button--secondary :hover
+  - name: secondary active state
+    options:
+      name: secondary
+      text: Secondary button
+      classes: govuk-button--secondary :active
+  - name: secondary focus state
+    options:
+      name: secondary
+      text: Secondary button
+      classes: govuk-button--secondary :focus
+  - name: secondary disabled
+    options:
+      name: secondary
+      text: Secondary button disabled
+      classes: govuk-button--secondary
+      disabled: true
+  - name: warning
+    description: A button for actions that need a warning
+    options:
+      name: Warning
+      text: Warning button
+      classes: govuk-button--warning
+  - name: warning hover state
+    options:
+      name: Warning
+      text: Warning button
+      classes: govuk-button--warning :hover
+  - name: warning active state
+    options:
+      name: Warning
+      text: Warning button
+      classes: govuk-button--warning :active
+  - name: warning focus state
+    options:
+      name: Warning
+      text: Warning button
+      classes: govuk-button--warning :focus
+  - name: warning disabled
+    options:
+      name: warning
+      text: Warning button disabled
+      classes: govuk-button--warning
+      disabled: true
+  - name: inverse
+    screenshot: true
+    description: A button that appears on dark backgrounds
+    pageTemplateOptions:
+      bodyClasses: app-template__body--inverse
+    options:
+      name: Inverse
+      text: Inverse button
+      classes: govuk-button--inverse
+  - name: inverse hover state
+    pageTemplateOptions:
+      bodyClasses: app-template__body--inverse
+    options:
+      name: Inverse
+      text: Inverse button
+      classes: govuk-button--inverse :hover
+  - name: inverse active state
+    pageTemplateOptions:
+      bodyClasses: app-template__body--inverse
+    options:
+      name: Inverse
+      text: Inverse button
+      classes: govuk-button--inverse :active
+  - name: inverse focus state
+    pageTemplateOptions:
+      bodyClasses: app-template__body--inverse
+    options:
+      name: Inverse
+      text: Inverse button
+      classes: govuk-button--inverse :focus
+  - name: inverse disabled
+    pageTemplateOptions:
+      bodyClasses: app-template__body--inverse
+    options:
+      name: Inverse
+      text: Inverse button
+      classes: govuk-button--inverse
+      disabled: true
+
+  # Hidden examples are not shown in the review app, but are used for tests and HTML fixtures
+  - name: attributes
+    hidden: true
+    options:
+      text: Submit
+      attributes:
+        aria-controls: test-target-element
+        data-tracking-dimension: 123
+  - name: link attributes
+    hidden: true
+    options:
+      href: '/'
+      text: Submit
+      attributes:
+        aria-controls: test-target-element
+        data-tracking-dimension: 123
+  - name: classes
+    hidden: true
+    options:
+      text: Submit
+      classes: app-button--custom-modifier
+  - name: link classes
+    hidden: true
+    options:
+      href: '/'
+      text: Submit
+      classes: app-button--custom-modifier
+  - name: name
+    hidden: true
+    options:
+      text: Submit
+      name: start-now
+  - name: type
+    hidden: true
+    options:
+      text: Submit
+      type: button
+  - name: explicit link
+    hidden: true
+    options:
+      href: '/'
+      text: Continue
+  - name: value
+    hidden: true
+    options:
+      text: Submit
+      value: start
+  - name: html
+    hidden: true
+    options:
+      text: Submit
+      html: Start <em>now</em>
+  - name: no type
+    hidden: true
+    options:
+      text: Button!
+  - name: no data-prevent-double-click
+    hidden: true
+    options:
+      text: Submit
+  - name: don't prevent double click
+    hidden: true
+    options:
+      text: Submit
+      preventDoubleClick: false
+  - name: id
+    hidden: true
+    options:
+      text: Submit
+      id: submit
+  - name: start link
+    hidden: true
+    options:
+      href: '/'
+      text: Start now link button
+      isStartButton: true
+  - name: start link with html
+    hidden: true
+    options:
+      href: '/'
+      html: Start <em>now</em>
+      isStartButton: true
+  - name: prevent double click
+    hidden: true
+    options:
+      text: Submit
+      preventDoubleClick: true

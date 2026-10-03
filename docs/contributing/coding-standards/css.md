@@ -1,8 +1,36 @@
-# CSS Style Guide
+# CSS and Sass Style Guide
+
+## Sass modules
+
+GOV.UK Frontend supports both `@import` and `@use` to include Sass files.
+
+Our public API is prefixed with `govuk-` to ensure consistent naming and avoid
+clashes with Sass elements in your application. You should `@use` govuk-frontend
+modules without a namespace:
+
+Bad:
+
+```scss
+@use "foo";
+
+.bar {
+  color: foo.govuk-function("baz")
+}
+```
+
+Good:
+
+```scss
+@use "foo" as *;
+
+.bar {
+  color: govuk-function("baz")
+}
+```
 
 ## Class naming convention
 
-## `govuk` namespacing
+### `govuk` namespacing
 
 All class names start with a `.govuk-` namespace to reduce the likelihood of
 conflicting with existing classes in your application. It also helps to identify
@@ -11,7 +39,7 @@ where the styling for a particular element is coming from.
 If you are building components for your own application or framework you should
 use a different prefix, for example `.app-` or the initials of your department.
 
-## Block Element Modifier (BEM)
+### Block Element Modifier (BEM)
 
 GOV.UK Frontend uses the Block Element Modifier (BEM) methodology when naming
 CSS classes. This is designed to help developers understand how the different
@@ -24,9 +52,9 @@ The naming convention follows this pattern:
 .block__element {}
 .block--modifier {}
 
-.govuk-card               // Block - the root of a component
-.govuk-card__body         // Element - a part of the block
-.govuk-card--active       // Modifier - a variant of the block
+.govuk-card {}            // Block - the root of a component
+.govuk-card__body {}      // Element - a part of the block
+.govuk-card--active {}    // Modifier - a variant of the block
 ```
 
 It uses double hyphens (`--`) and underscores (`__`) so that the block, element
@@ -35,16 +63,16 @@ or modifiers themselves can be hyphen delimited without causing ambiguity.
 For example:
 
 ```scss
-.govuk-phase-banner
-.govuk-phase-banner__phase-tag
-.govuk-phase-banner__phase-tag--light-blue
+.govuk-pagination {}
+.govuk-pagination__link-title {}
+.govuk-pagination__link-title--decorated {}
 ```
 
 ### Further reading:
 
-* [Get BEM](http://getbem.com/introduction/)
-* [BEM Resources](https://github.com/sturobson/BEM-resources)
-* [Harry Roberts - BEMIT: Taking the BEM Naming Convention a Step Further](https://csswizardry.com/2015/08/bemit-taking-the-bem-naming-convention-a-step-further/)
+- [Get BEM](http://getbem.com/introduction/)
+- [BEM Resources](https://github.com/sturobson/BEM-resources)
+- [Harry Roberts - BEMIT: Taking the BEM Naming Convention a Step Further](https://csswizardry.com/2015/08/bemit-taking-the-bem-naming-convention-a-step-further/)
 
 ## Nesting
 
@@ -56,24 +84,24 @@ given class name. It also discourages excessive nesting.
 
 Bad:
 
-```
+```scss
 .govuk-breadcrumb {
-  ...
+  // ...
   &__item {
-    ...
+    // ...
   }
 }
 ```
 
 Good:
 
-```
+```scss
 .govuk-breadcrumb {
-  ...
+  // ...
 }
 
 .govuk-breadcrumb__item {
-  ...
+  // ...
 }
 ```
 
@@ -109,18 +137,33 @@ This class is part of the component, rather than a parent of a component.
 **Why?**
 This makes it easier to keep track of different contexts.
 
-# Linting
+## Formatting and linting
 
-To ensure code quality and consistency in our Sass files we check that certain
-style rules are followed. These rules are based on [stylelint-config-gds](https://github.com/alphagov/stylelint-config-gds/blob/main/scss.js), but we also add our own custom rules with a project [YAML file](../../../.stylelintrc.yml).
+To ensure code quality and consistency in our Sass files we check that certain rules are followed. These rules are based on [GDS Stylelint Config](https://github.com/alphagov/stylelint-config-gds/blob/main/scss.js), but we also add our own custom rules with a project [config file](/stylelint.config.js).
+
+For consistent formatting we run [Prettier](https://prettier.io).
 
 See [testing and linting](/docs/releasing/testing-and-linting.md) for more information.
 
 ## Running the lint task
 
-You can run the linter in gulp by running `gulp scss:lint`, or use linting in [Sublime Text](https://github.com/SublimeLinter/SublimeLinter-stylelint), [Atom](https://atom.io/packages/linter-stylelint) or [other editors that support stylelint](https://stylelint.io/user-guide/integrations/editor).
+You can run the linter with `npm run lint:scss`, or use linting in [Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=stylelint.vscode-stylelint) and [other editors that support Stylelint](https://stylelint.io/user-guide/customize/#using-stylelint).
 
-See also [testing and linting](/docs/releasing/testing-and-linting.md).
+To automatically fix Stylelint issues, add the `--fix` flag:
+
+```shell
+npm run lint:scss -- --fix
+```
+
+## Running the formatting task
+
+You can run the formatter with `npm run lint:prettier`, or use formatting in [Visual Studio Code](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) and [other editors that support Prettier](https://prettier.io/docs/en/editors.html)
+
+To automatically fix Prettier issues in all supported files, add the `--write` flag:
+
+```shell
+npm run lint:prettier -- --write
+```
 
 ## Linting rules
 
@@ -131,29 +174,33 @@ We use the following rules when linting files:
 ### Write each property on its own line
 
 Bad:
-```
-.selector {border: 0; padding: 0;}
+
+```scss
+.selector {padding: 0; border: 0;}
 ```
 
 Good:
-```
+
+```scss
 .selector {
-  border: 0;
   padding: 0;
+  border: 0;
 }
 ```
 
 ### Use variables for colours not HEX values in selectors rules, unless in variables.
 
 Bad:
-```
+
+```scss
 .selector {
   color: #005ea5;
 }
 ```
 
 Good:
-```
+
+```scss
 .selector {
   color: $govuk-blue;
 }
@@ -162,170 +209,232 @@ Good:
 ### Colours defined as variables should be in lowercase and in full length
 
 Bad:
-```
+
+```scss
 $white: #FFF;
 ```
 
 Good:
-```
+
+```scss
 $white: #ffffff;
-```
-
-### Use `border: 0` not `none` to denote no border
-
-Bad:
-```
-.selector {
-  border: none;
-}
-```
-
-Good:
-```
-.selector {
-  border: 0;
-}
 ```
 
 ### Avoid using ID selectors
 
 Bad:
-```
+
+```scss
 #content {
-  ...
+  // ...
 }
 ```
 
 Good:
-```
+
+```scss
 .govuk-wrapper {
-  ...
+  // ...
 }
 ```
 
 ### Separate rule, function, and mixin declarations with empty lines
 
 Bad:
-```
+
+```scss
 p {
   margin: 0;
   em {
-    ...
+    // ...
   }
 }
 a {
-  ...
+  // ...
 }
 ```
 
 Good:
-```
+
+```scss
 p {
   margin: 0;
 
   em {
-    ...
+    // ...
   }
 }
 
 a {
-  ...
+  // ...
 }
 ```
 
 ### Use no more than 3 levels of nesting
 
 Bad:
-```
+
+```scss
 .govuk-breadcrumb {
-  ...
+  // ...
   &__item {
-    ...
+    // ...
   }
 }
 ```
 
 Good:
-```
+
+```scss
 .govuk-breadcrumb {
-  ...
+  // ...
 }
 
 .govuk-breadcrumb__item {
-  ...
+  // ...
 }
 ```
 
 ### Don't use extends, use mixins
 
 Bad:
-```
+
+```scss
 @extend %contain-floats;
 ```
 
 Good:
-```
+
+```scss
 @include clearfix;
 ```
 
 ### Allow max 3-rule property shorthand if possible
 
 Bad:
-```
+
+```scss
 margin: 1px 2px 3px 2px;
 ```
 
 Good:
-```
+
+```scss
 margin: 1px 2px 3px;
 ```
-### Files should always have a final newline
 
-### Commas in lists should be followed by a space
-
-### The basenames of `@import`ed SCSS partials should not begin with an underscore and should not include the filename extension
+### Strings should always use double quotes
 
 Bad:
-```
-@import '_foo.scss';
-@import '_bar/foo.scss';
+
+```scss
+@use 'foo';
+
+$govuk-font-family-gds-transport: 'GDS Transport', arial, sans-serif;
+
+.bar {
+  content: 'baz';
+}
 ```
 
 Good:
+
+```scss
+@use "foo";
+
+$govuk-font-family-gds-transport: "GDS Transport", arial, sans-serif;
+
+.bar {
+  content: "baz";
+}
 ```
-@import 'foo';
-@import 'bar/foo';
+
+### Files should always have a final newline
+
+### The basenames of `@use`ed SCSS partials should not begin with an underscore and should not include the filename extension
+
+Bad:
+
+```scss
+@use "_foo.scss";
+@use "_bar/foo.scss";
+```
+
+Good:
+
+```scss
+@use "foo";
+@use "bar/foo";
 ```
 
 ### Properties should be formatted with a single space separating the colon from the property's value
 
 Bad:
-```
+
+```scss
 .foo {
-  content:'bar';
+  content:"bar";
 }
 ```
 
 Good:
-```
+
+```scss
 .foo {
-  content: 'bar';
+  content: "bar";
+}
+```
+
+### `@if` statements should be written without surrounding brackets
+
+Bad:
+
+```scss
+@if ($foo == $bar) {
+  $baz: 1;
+}
+```
+
+Good:
+
+```scss
+@if $foo == $bar {
+  $baz: 1;
+}
+```
+
+### `@if` statements comparing against `null` values should use `not`
+
+Bad:
+
+```scss
+@if $foo == null {
+  $baz: 1;
+}
+```
+
+Good:
+
+```scss
+@if not $foo {
+  $baz: 1;
 }
 ```
 
 ### Operators should be formatted with a single space on both sides of an infix operator. These include `+, -, *, /, %, ==, !=, >, >=, <,` and `<=`
 
 Bad:
-```
-.selector {
+
+```scss
+.selector-1 {
   margin: 5px+15px;
 }
 
 $foo: 1;
 $bar: 3;
 
-.selector {
-  margin: $foo+$bar+'px';
+.selector-2 {
+  margin: $foo+$bar+"px";
 }
 
 $foo: 1+1;
@@ -335,22 +444,23 @@ $bar: 2-1;
   $baz: 1;
 }
 
-@if ($foo!=$bar) {
+@if $foo!=$bar {
   $baz: 1;
 }
 ```
 
 Good:
-```
-.selector {
+
+```scss
+.selector-1 {
   margin: 5px + 15px;
 }
 
 $foo: 1;
 $bar: 3;
 
-.selector {
-  margin: $foo + $bar + 'px';
+.selector-2 {
+  margin: $foo + $bar + "px";
 }
 
 $foo: 1 + 1;
@@ -360,40 +470,24 @@ $bar: 2 - 1;
   $baz: 1;
 }
 
-@if ($foo != $bar) {
+@if $foo != $bar {
   $baz: 1;
-}
-```
-
-### Avoid whitespace between parentheses and the arguments
-
-Bad:
-
-```
-@function foo( $bar, $baz ) {
-  @return $bar + $baz;
-}
-```
-
-Good:
-
-```
-@function foo($bar, $baz) {
-  @return $bar + $baz;
 }
 ```
 
 ### Functions, mixins, variables, and placeholders should be declared with all lowercase letters and hyphens instead of underscores
 
 Bad:
-```
+
+```scss
 @mixin FONT_STACK() {
   font-family: $govuk-font-stack;
 }
 ```
 
 Good:
-```
+
+```scss
 @mixin font-stack() {
   font-family: $govuk-font-stack;
 }
@@ -402,14 +496,16 @@ Good:
 ### Omit length units on zero values
 
 Bad:
-```
+
+```scss
 .selector {
   margin: 0px;
 }
 ```
 
 Good:
-```
+
+```scss
 .selector {
   margin: 0;
 }
@@ -418,7 +514,8 @@ Good:
 ### Property values and variable declarations should always end with a semicolon
 
 Bad:
-```
+
+```scss
 .selector {
   margin: 0
 }
@@ -427,7 +524,8 @@ $my-example-var: value
 ```
 
 Good:
-```
+
+```scss
 .selector {
   margin: 0;
 }
@@ -435,19 +533,21 @@ Good:
 $my-example-var: value;
 ```
 
-### Don't write trailing zeroes for numeric values with a decimal point
+### Write leading or trailing zeroes for numeric values with a decimal point
 
 Bad:
-```
+
+```scss
 .selector {
-  font-size: 0.50em;
+  font-size: .50em;
 }
 ```
 
 Good:
-```
+
+```scss
 .selector {
-  font-size: .5em;
+  font-size: 0.5em;
 }
 ```
 
@@ -455,9 +555,20 @@ Good:
 
 More write up on [supported rules](https://stylelint.io/user-guide/rules/list).
 
-##  SassDoC
-We document SCSS using [SassDoc](http://sassdoc.com/file-level-annotations/). This includes most of the settings, helpers and tools layers, with variables, functions and mixins being marked as private or public.
+## Comments
 
-The syntax is used to generate a [SassDoc application](http://govuk-frontend-review.herokuapp.com/docs/) that documents SCSS in a readable format.
+For comments, you should normally use 2 slashes (`//`) at the start of the line.
 
-See [colour.scss](../../../src/govuk/helpers/_colour.scss) for an example of SassDoc syntax.
+If you need to include the comment in the compiled CSS, use the multi-line ('loud') comment style, which starts with `/*` and ends at the next `*/`.
+
+Wrap comments at 80 characters wherever possible.
+
+### SassDoc
+
+We document SCSS using [SassDoc](http://sassdoc.com/). This includes most of the settings, helpers and tools layers, with variables, functions and mixins being marked as private or public.
+
+The SassDoc comments are used to generate the [Sass API reference in the GOV.UK Frontend docs](https://frontend.design-system.service.gov.uk/sass-api-reference/).
+
+For SassDoc comments, use 3 slashes (`///`) at the start of the line.
+
+See [`_colour.scss`](/packages/govuk-frontend/src/govuk/helpers/_colour.scss) for an example of SassDoc syntax.

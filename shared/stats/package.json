@@ -1,0 +1,28 @@
+{
+  "private": true,
+  "name": "@govuk-frontend/stats",
+  "description": "GOV.UK Frontend build stats",
+  "main": "src/index.mjs",
+  "engines": {
+    "node": "^24.11.0",
+    "npm": "^11.6.1 <11.6.3 || ^11.6.4"
+  },
+  "license": "MIT",
+  "scripts": {
+    "clean": "del-cli dist",
+    "prestats": "npm run clean",
+    "stats": "rollup --config rollup.config.mjs"
+  },
+  "dependencies": {
+    "@govuk-frontend/config": "*",
+    "@govuk-frontend/lib": "*",
+    "filesize": "^11.0.22"
+  },
+  "devDependencies": {
+    "@rollup/plugin-node-resolve": "^16.0.3",
+    "@rollup/plugin-terser": "^1.0.0",
+    "govuk-frontend": "*",
+    "rollup": "^4.63.1",
+    "rollup-plugin-visualizer": "^7.1.1"
+  }
+}

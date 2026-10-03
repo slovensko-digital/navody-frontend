@@ -15,11 +15,28 @@ Let us know in your pull request or [contact us](https://design-system.service.g
 
 ## 1. Fix any CSS or JavaScript style errors
 
-In your project folder, run `npm test`.
+In your project folder, run `npm run lint`.
 
 Fix any CSS or JavaScript style errors that the linting tests report.
 
-## 2. Check your changes in the ‘review app’
+## 2. Fix any invalid HTML
+
+To make sure your HTML markup is valid, [check your page with W3C's markup validator](https://validator.w3.org/).
+
+You should also check your HTML markup is valid after JavaScript has modified it. To make sure, [check your page with W3C's 'Check serialized DOM of current page’ bookmarklet](https://validator.w3.org/nu/about.html#extras).
+
+You should use the bookmarklet if:
+
+- your page has a lot of JavaScript
+- you can only check your page when you've logged in to a site
+
+If you can, fix any errors or warnings reported by either the validator or bookmarklet.
+
+You do not need to fix any [known issues with our components](https://github.com/orgs/alphagov/projects/37) reported by either the validator or bookmarklet.
+
+If you need help with fixing an error or a warning, leave a note in your pull request or [contact the Design System team](https://design-system.service.gov.uk/#support).
+
+## 3. Check your changes in the ‘review app’
 
 In your project folder, run `npm start`, then go to [http://localhost:3000/]([http://localhost:3000/]) in your browser to open the 'review app'.
 
@@ -32,27 +49,32 @@ Check that:
 
 You should add an example to the review app if the existing examples do not reflect the changes you've made.
 
-1. Open `src/govuk/components/<COMPONENT>/<COMPONENT>.yaml`, where `<COMPONENT>` is the component you've changed.
+1. Open `packages/govuk-frontend/src/govuk/components/<COMPONENT>/<COMPONENT>.yaml`, where `<COMPONENT>` is the component you've changed.
 2. Add or update examples in the `examples` list.
 
-If you've created a new component, create a new `src/govuk/<COMPONENT>/<COMPONENT>.yaml` file instead, where `<COMPONENT>` is the name of the component you've created.
+If you've created a new component, create a new `packages/govuk-frontend/src/govuk/<COMPONENT>/<COMPONENT>.yaml` file instead, where `<COMPONENT>` is the name of the component you've created.
 
-## 3. Test in supported browsers and assistive technology
+## 4. Test in supported browsers and assistive technology
 
 You should test that your contribution works:
 
-- in [recommended browsers](https://www.gov.uk/service-manual/technology/designing-for-different-browsers-and-devices#browsers-to-test-in)
-- with [recommended assistive technologies](https://www.gov.uk/service-manual/technology/testing-with-assistive-technologies#what-to-test)
-- in [Internet Explorer 8](https://frontend.design-system.service.gov.uk/supporting-ie8/), 9 and 10 - components do not need to look perfect
+- in Internet Explorer 11 and other [grade X browsers](/docs/contributing/browser-support.md#browsers-grades) - components do not need to look perfect but should work without JavaScript
+- in [recommended browsers](https://www.gov.uk/service-manual/technology/designing-for-different-browsers-and-devices#browsers-to-test-in), including when you [resize text](/docs/contributing/resize-text-in-browsers.md)
 - when your users [override colours in Windows, Firefox and Chrome](https://accessibility.blog.gov.uk/2018/08/01/supporting-users-who-change-colours-on-gov-uk/)
+- with [recommended assistive technologies](https://www.gov.uk/service-manual/technology/testing-with-assistive-technologies#what-to-test)
 
-## 4. Run the automated tests
+## 5. Run the automated tests
 
-In your project folder, run `npm test` to run the automated tests, including linting.
+Automated testing helps ensure that the code changes we make do not unintentionally break functionality.
+Tests are automatically run against a branch, pull request, or when the project is built for release, and will notify us if a test has failed.
+
+In your project folder, run [`npm test` to run the automated tests](../releasing/testing-and-linting.md#running-all-tests-locally) and [`npm run lint` for linting checks](../releasing/testing-and-linting.md#running-all-linting-checks-locally).
 
 If a test fails, you should check your code for any errors, then update any tests you need to.
 
-## 5. Write new tests
+## 6. Write new tests
+
+You can [read more about the different types of tests in this project](../releasing/testing-and-linting.md).
 
 You should write new tests if you’ve created a new component, or changed the way a component works by:
 
@@ -60,26 +82,39 @@ You should write new tests if you’ve created a new component, or changed the w
 - changing or adding to the component's Nunjucks macro
 - creating or updating a Sass mixin or function
 
-Test files use examples from each component’s `.yaml` file, for example `src/govuk/components/button/button.yaml`. When you add or update tests, you can use the existing examples or add new ones.
+If you're new to testing, see existing test files for examples of things to do. Do not let the tests keep you from submitting your contribution! If you're not sure which tests are needed or are having trouble updating them, submit your pull request anyway. We will help you create the tests and solve problems during code review.
 
-Use `hidden: true` in a new example if you do not want to include the example in the review app. The example will still appear in our [test fixtures](http://frontend.design-system.service.gov.uk/testing-your-html/).
+Some test files use examples from each component’s `.yaml` file, for example `packages/govuk-frontend/src/govuk/components/button/button.yaml`. When you add or update these tests, you can use the existing examples or add new ones.
+
+Examples with no visual changes, for example HTML attribute changes, should be hidden using `hidden: true`.
+
+Hidden examples will:
+
+- be removed from the component's overview page in the GOV.UK Frontend review application
+- still appear in GOV.UK Frontend's [test fixtures](http://frontend.design-system.service.gov.uk/testing-your-html/)
+
+To visit hidden examples in the review application use a direct URL, for example the [hidden "start link" Button example](https://github.com/alphagov/govuk-frontend/blob/cd357d1b33be497349cb268febff8a5ee03aa664/packages/govuk-frontend/src/govuk/components/button/button.yaml#L244) can be accessed at "[/components/button/start-link/preview](https://govuk-frontend-review.herokuapp.com/components/button/start-link/preview).
+
+All tests should try and meet [our testing conventions](../releasing/testing-and-linting.md#conventions)
 
 ### If you created a component
 
-Create the following files in the `src/govuk/components` folder:
+Create the following files in the `packages/govuk-frontend/src/govuk/components` folder:
 
 - `<COMPONENT>/<COMPONENT>.test.js` - to test functionality if the component uses JavaScript
+- `<COMPONENT>/<COMPONENT>.unit.test.mjs` - to unit test any JavaScript logic
 - `<COMPONENT>/template.test.js` - to test the Nunjucks macro
 
 Where `<COMPONENT>` is the name of the component you created.
 
-You can use the existing files in the `src/govuk/components` folder as templates for your new files.
+You can use the existing files in the `packages/govuk-frontend/src/govuk/components` folder as templates for your new files.
 
 ### If you changed or added to a component
 
-In the `src/govuk/components` folder, update or add tests to:
+In the `packages/govuk-frontend/src/govuk/components` folder, update or add tests to:
 
 - `<COMPONENT>/<COMPONENT>.test.js` - if you updated functionality
+- `<COMPONENT>/<COMPONENT>.unit.test.mjs` - if you updated JavaScript logic
 - `<COMPONENT>/template.test.js` - if you updated the Nunjucks macro
 
 Where `<COMPONENT>` is the name of the component you changed or added to.
@@ -88,22 +123,40 @@ Where `<COMPONENT>` is the name of the component you changed or added to.
 
 Update or add tests in the `.test.js` file that matches the name of the `.scss` file you created or updated. Create the `.test.js` file if it does not exist.
 
-For example, if you updated a mixin in `src/govuk/helpers/_colour.scss`, update or add tests in `src/govuk/helpers/_colour.test.js`.
+For example, if you updated a mixin in [`packages/govuk-frontend/src/govuk/helpers/_colour.scss`](/packages/govuk-frontend/src/govuk/helpers/_colour.scss), update or add tests in [`packages/govuk-frontend/src/govuk/helpers/colour.test.js`](/packages/govuk-frontend/src/govuk/helpers/colour.test.js).
 
-## 6. Update the snapshot tests
+## 7. Update the snapshot tests
 
 If your component uses another component, one of the [Jest snapshot tests](https://jestjs.io/docs/en/snapshot-testing) may fail. Snapshot tests compare a component's current markup with a previously stored version.
 
 If a snapshot test fails, follow these steps.
 
 1. Check that the component's new markup is correct.
-2. Run `npm test -- -u src/govuk/components/<COMPONENT>` to update the snapshot test with the new markup.
-3. Commit the updated file in the `/src/govuk/components/<COMPONENT>/__snapshots__/` folder.
+2. Run `npm test -- -u packages/govuk-frontend/src/govuk/components/<COMPONENT>` to update the snapshot test with the new markup.
+3. Commit the updated file in the `/packages/govuk-frontend/src/govuk/components/<COMPONENT>/__snapshots__/` folder.
 4. In the commit message, tell us you're updating the snapshot file and why.
 
 Where `<COMPONENT>` is the name of the component you've changed.
 
-## 7. Tell us what you’ve tested and checked
+## 8. Test that your changes work in the GOV.UK Design System (optional)
+
+To make sure your changes work in the Design System, use `npm link` to test before publishing, as follows:
+
+```shell
+cd ../govuk-design-system
+git checkout main
+git pull
+npm ci # note running `npm ci` after `npm link` will destroy the link.
+npm link ../govuk-frontend/packages/govuk-frontend/
+```
+
+When you've finished testing, run this command to unlink the package:
+
+```shell
+npm unlink ../govuk-frontend/packages/govuk-frontend/
+```
+
+## 9. Tell us what you’ve tested and checked
 
 When you create the pull request for your contributions, list what you’ve tested and checked in the pull request description.
 

@@ -1,0 +1,14 @@
+.govuk-warning-text {
+  @include sdn-font($size: 20, $weight: light);
+
+  strong {
+    @include sdn-font($size: 18, $weight: bold);
+  }
+}
+
+.govuk-warning-text__icon {
+  top: 50%;
+  margin-top: -20px;
+  border: 3px solid #bfc1c3;
+  background: #bfc1c3;
+}

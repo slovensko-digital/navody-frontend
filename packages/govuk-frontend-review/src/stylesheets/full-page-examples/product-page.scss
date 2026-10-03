@@ -1,0 +1,16 @@
+@use "pkg:govuk-frontend/base" as *;
+
+.app-masthead {
+  display: flow-root;
+  background: govuk-functional-colour(brand);
+}
+
+.app-breadcrumbs__underline {
+  margin-bottom: 0;
+  padding-bottom: govuk-spacing(2);
+  border-bottom: 1px solid #5694ca;
+}
+
+.app-inverse {
+  color: govuk-colour("white");
+}

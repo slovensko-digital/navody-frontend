@@ -1,0 +1,49 @@
+{
+  "private": true,
+  "name": "@govuk-frontend/helpers",
+  "description": "GOV.UK Frontend shared helpers",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./jest/*": "./jest/*",
+    "./*": {
+      "sass": "./*.scss",
+      "default": "./*.js"
+    }
+  },
+  "engines": {
+    "node": "^24.11.0",
+    "npm": "^11.6.1 <11.6.3 || ^11.6.4"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@axe-core/puppeteer": "^4.11.2",
+    "@govuk-frontend/config": "*",
+    "@govuk-frontend/lib": "*",
+    "axe-core": "^4.10.3",
+    "cheerio": "^1.2.0",
+    "govuk-frontend": "*",
+    "jest-axe": "^10.0.0",
+    "jest-dev-server": "^11.0.0",
+    "jest-environment-jsdom": "^30.3.0",
+    "jest-environment-node-single-context": "^29.4.0",
+    "jest-environment-puppeteer": "^11.0.0",
+    "mime-types": "^3.0.2",
+    "outdent": "^0.8.0",
+    "puppeteer": "^24.42.0",
+    "sass-embedded": "^1.103.1",
+    "slug": "^9.1.0"
+  },
+  "peerDependencies": {
+    "@puppeteer/browsers": "^2.1.0",
+    "puppeteer-core": "^24.3.0"
+  },
+  "peerDependenciesMeta": {
+    "@puppeteer/browsers": {
+      "optional": true
+    },
+    "puppeteer-core": {
+      "optional": true
+    }
+  }
+}
